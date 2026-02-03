@@ -14,7 +14,9 @@ public class DashboardController {
 
     @GetMapping("/")
     public String home() {
-        return "redirect:/dashboard";
+        // TODO: Quando implementar Spring Security, verificar autenticação aqui
+        // Por enquanto redirecionando para login
+        return "redirect:/auth/login";
     }
 
 }
