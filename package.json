@@ -1,0 +1,18 @@
+{
+  "name": "spring-crud",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:css": "npx @tailwindcss/cli -i ./src/main/resources/input.css -o ./src/main/resources/static/main.css",
+    "watch:css": "npx @tailwindcss/cli -i ./src/main/resources/input.css -o ./src/main/resources/static/main.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.18",
+    "tailwindcss": "^4.1.18"
+  }
+}
