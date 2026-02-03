@@ -2,6 +2,7 @@
 <html
   lang="pt-BR"
   xmlns:th="http://www.thymeleaf.org"
+  xmlns:ui="http://www.thymeleaf.org"
   th:replace="~{layout-admin :: layout(~{::content}, ${usuario.id != null ? 'Editar Usuário' : 'Novo Usuário'}, ${usuario.id != null ? 'Editar Usuário' : 'Novo Usuário'})}">
   <body>
     <th:block th:fragment="content">
@@ -10,18 +11,22 @@
         <a
           th:href="@{/usuarios}"
           class="inline-flex items-center gap-2 text-sm font-medium text-gray-500 transition hover:text-brand-500 dark:text-gray-400 dark:hover:text-brand-400">
-          <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
+          <ui:icon th:replace="~{ui/icon :: arrowLeft}" />
           Voltar para lista
         </a>
       </div>
 
-      <!-- Form Card -->
+      <!-- Alert Messages -->
+      <div th:if="${successMessage}" class="mb-6">
+        <ui:alert
+          th:replace="~{ui/alert :: dismissible(type='success', title='Sucesso!', message=${successMessage})}" />
+      </div>
+      <div th:if="${errorMessage}" class="mb-6">
+        <ui:alert
+          th:replace="~{ui/alert :: dismissible(type='error', title='Erro!', message=${errorMessage})}" />
+      </div>
+
+      <!-- Form Card with Header and Footer -->
       <div
         class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         <!-- Header -->
@@ -43,186 +48,175 @@
           th:action="${usuario.id != null ? '/usuarios/' + usuario.id : '/usuarios'}"
           th:object="${usuario}"
           method="post"
-          class="border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800">
+          class="border-t border-gray-100 dark:border-gray-800">
           <input th:if="${usuario.id != null}" type="hidden" name="_method" value="PUT" />
 
-          <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <!-- Nome -->
-            <div>
-              <label
-                for="nome"
-                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                Nome
-                <span class="text-error-500">*</span>
-              </label>
-              <input
-                type="text"
-                id="nome"
-                th:field="*{nome}"
-                placeholder="Digite o nome completo"
-                th:classappend="${#fields.hasErrors('nome')} ? 'border-error-300 focus:border-error-500 focus:ring-error-500/10 dark:border-error-700' : 'border-gray-300 focus:border-brand-300 focus:ring-brand-500/10 dark:border-gray-700 dark:focus:border-brand-800'"
-                class="shadow-theme-xs h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-              <p
-                th:if="${#fields.hasErrors('nome')}"
-                th:errors="*{nome}"
-                class="mt-1.5 text-sm text-error-500"></p>
-            </div>
-
-            <!-- E-mail -->
-            <div>
-              <label
-                for="email"
-                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                E-mail
-                <span class="text-error-500">*</span>
-              </label>
-              <input
-                type="email"
-                id="email"
-                th:field="*{email}"
-                placeholder="exemplo@email.com"
-                th:classappend="${#fields.hasErrors('email')} ? 'border-error-300 focus:border-error-500 focus:ring-error-500/10 dark:border-error-700' : 'border-gray-300 focus:border-brand-300 focus:ring-brand-500/10 dark:border-gray-700 dark:focus:border-brand-800'"
-                class="shadow-theme-xs h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-              <p
-                th:if="${#fields.hasErrors('email')}"
-                th:errors="*{email}"
-                class="mt-1.5 text-sm text-error-500"></p>
-            </div>
-
-            <!-- CPF -->
-            <div>
-              <label
-                for="cpf"
-                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                CPF
-                <span class="text-error-500">*</span>
-              </label>
-              <input
-                type="text"
-                id="cpf"
-                th:field="*{cpf}"
-                placeholder="000.000.000-00"
-                x-data
-                x-mask="999.999.999-99"
-                th:classappend="${#fields.hasErrors('cpf')} ? 'border-error-300 focus:border-error-500 focus:ring-error-500/10 dark:border-error-700' : 'border-gray-300 focus:border-brand-300 focus:ring-brand-500/10 dark:border-gray-700 dark:focus:border-brand-800'"
-                class="shadow-theme-xs h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-              <p
-                th:if="${#fields.hasErrors('cpf')}"
-                th:errors="*{cpf}"
-                class="mt-1.5 text-sm text-error-500"></p>
-            </div>
-
-            <!-- Senha -->
-            <div x-data="{ showPassword: false }">
-              <label
-                for="senha"
-                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                Senha
-                <span th:unless="${usuario.id != null}" class="text-error-500">*</span>
-                <span th:if="${usuario.id != null}" class="text-xs text-gray-400">
-                  (deixe em branco para manter a atual)
-                </span>
-              </label>
-              <div class="relative">
-                <input
-                  :type="showPassword ? 'text' : 'password'"
-                  id="senha"
-                  th:field="*{senha}"
-                  placeholder="••••••••"
-                  th:classappend="${#fields.hasErrors('senha')} ? 'border-error-300 focus:border-error-500 focus:ring-error-500/10 dark:border-error-700' : 'border-gray-300 focus:border-brand-300 focus:ring-brand-500/10 dark:border-gray-700 dark:focus:border-brand-800'"
-                  class="shadow-theme-xs h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
-                <button
-                  type="button"
-                  @click="showPassword = !showPassword"
-                  class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                  <svg
-                    x-show="!showPassword"
-                    class="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
-                  <svg
-                    x-show="showPassword"
-                    class="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-                  </svg>
-                </button>
-              </div>
-              <p
-                th:if="${#fields.hasErrors('senha')}"
-                th:errors="*{senha}"
-                class="mt-1.5 text-sm text-error-500"></p>
-            </div>
-
-            <!-- Status Ativo -->
-            <div class="lg:col-span-2">
-              <div class="flex items-center gap-3">
-                <div class="relative flex items-center">
-                  <input
-                    type="checkbox"
-                    id="ativo"
-                    th:field="*{ativo}"
-                    class="peer h-5 w-5 shrink-0 cursor-pointer appearance-none rounded border border-gray-300 bg-white checked:border-brand-500 checked:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900" />
-                  <svg
-                    class="pointer-events-none absolute left-0.5 top-0.5 h-4 w-4 text-white opacity-0 peer-checked:opacity-100"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="3">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
+          <div class="p-5 sm:p-6">
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+              <!-- Nome -->
+              <div>
                 <label
-                  for="ativo"
-                  class="cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-400">
-                  Usuário ativo
+                  for="nome"
+                  class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                  Nome
+                  <span class="text-error-500">*</span>
                 </label>
+                <input
+                  type="text"
+                  id="nome"
+                  th:field="*{nome}"
+                  placeholder="Nome completo"
+                  required
+                  th:classappend="${#fields.hasErrors('nome')} ? 'border-error-300 focus:border-error-500 focus:ring-error-500/10 dark:border-error-700' : 'border-gray-300 focus:border-brand-300 focus:ring-brand-500/10 dark:border-gray-700 dark:focus:border-brand-800'"
+                  class="shadow-theme-xs h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                <p
+                  th:if="${#fields.hasErrors('nome')}"
+                  th:errors="*{nome}"
+                  class="mt-1.5 text-sm text-error-500"></p>
               </div>
-              <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-500">
-                Usuários inativos não conseguem acessar o sistema.
-              </p>
+
+              <!-- Email -->
+              <div>
+                <label
+                  for="email"
+                  class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                  E-mail
+                  <span class="text-error-500">*</span>
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  th:field="*{email}"
+                  placeholder="seu@email.com"
+                  required
+                  th:classappend="${#fields.hasErrors('email')} ? 'border-error-300 focus:border-error-500 focus:ring-error-500/10 dark:border-error-700' : 'border-gray-300 focus:border-brand-300 focus:ring-brand-500/10 dark:border-gray-700 dark:focus:border-brand-800'"
+                  class="shadow-theme-xs h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                <p
+                  th:if="${#fields.hasErrors('email')}"
+                  th:errors="*{email}"
+                  class="mt-1.5 text-sm text-error-500"></p>
+              </div>
+
+              <!-- CPF with Mask -->
+              <div>
+                <label
+                  for="cpf"
+                  class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                  CPF
+                  <span class="text-error-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="cpf"
+                  th:field="*{cpf}"
+                  placeholder="000.000.000-00"
+                  required
+                  x-data
+                  x-mask="999.999.999-99"
+                  th:classappend="${#fields.hasErrors('cpf')} ? 'border-error-300 focus:border-error-500 focus:ring-error-500/10 dark:border-error-700' : 'border-gray-300 focus:border-brand-300 focus:ring-brand-500/10 dark:border-gray-700 dark:focus:border-brand-800'"
+                  class="shadow-theme-xs h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                <p
+                  th:if="${#fields.hasErrors('cpf')}"
+                  th:errors="*{cpf}"
+                  class="mt-1.5 text-sm text-error-500"></p>
+                <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-500">
+                  Formato: 000.000.000-00
+                </p>
+              </div>
+
+              <!-- Senha with Toggle -->
+              <div x-data="{ showPassword: false }">
+                <label
+                  for="senha"
+                  class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                  Senha
+                  <span th:if="${usuario.id == null}" class="text-error-500">*</span>
+                  <span th:if="${usuario.id != null}" class="text-xs text-gray-400">
+                    (deixe em branco para manter)
+                  </span>
+                </label>
+                <div class="relative">
+                  <input
+                    :type="showPassword ? 'text' : 'password'"
+                    id="senha"
+                    th:field="*{senha}"
+                    placeholder="••••••••"
+                    th:required="${usuario.id == null}"
+                    minlength="6"
+                    th:classappend="${#fields.hasErrors('senha')} ? 'border-error-300 focus:border-error-500 focus:ring-error-500/10 dark:border-error-700' : 'border-gray-300 focus:border-brand-300 focus:ring-brand-500/10 dark:border-gray-700 dark:focus:border-brand-800'"
+                    class="shadow-theme-xs h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                  <button
+                    type="button"
+                    @click="showPassword = !showPassword"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                    <svg
+                      x-show="!showPassword"
+                      class="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <svg
+                      x-show="showPassword"
+                      class="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                    </svg>
+                  </button>
+                </div>
+                <p
+                  th:if="${#fields.hasErrors('senha')}"
+                  th:errors="*{senha}"
+                  class="mt-1.5 text-sm text-error-500"></p>
+                <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-500">
+                  Mínimo de 6 caracteres
+                </p>
+              </div>
+
+              <!-- Status (Checkbox estilizado como Toggle) -->
+              <div class="lg:col-span-2">
+                <label for="ativo" class="flex cursor-pointer items-center gap-3">
+                  <div class="relative">
+                    <input type="checkbox" id="ativo" th:field="*{ativo}" class="peer sr-only" />
+                    <div
+                      class="h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-brand-500 peer-focus:ring-2 peer-focus:ring-brand-500/20 dark:bg-gray-700"></div>
+                    <div
+                      class="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow transition peer-checked:translate-x-5"></div>
+                  </div>
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-400">
+                    Usuário ativo
+                  </span>
+                </label>
+                <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-500">
+                  Desmarque para desativar o usuário
+                </p>
+              </div>
             </div>
           </div>
 
-          <!-- Form Actions -->
+          <!-- Footer with Buttons -->
           <div
-            class="mt-8 flex items-center justify-end gap-3 border-t border-gray-100 pt-6 dark:border-gray-800">
-            <a
-              th:href="@{/usuarios}"
-              class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-theme-xs transition hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
-              Cancelar
-            </a>
-            <button
-              type="submit"
-              class="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white shadow-theme-xs transition hover:bg-brand-600">
-              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M5 13l4 4L19 7" />
-              </svg>
-              <span th:if="${usuario.id != null}">Atualizar</span>
-              <span th:unless="${usuario.id != null}">Cadastrar</span>
-            </button>
+            class="flex items-center justify-end gap-3 border-t border-gray-100 px-5 py-4 sm:px-6 dark:border-gray-800">
+            <ui:button
+              th:replace="~{ui/button :: linkSecondary(href=@{/usuarios}, text='Cancelar')}" />
+            <ui:button
+              th:replace="~{ui/button :: primary(text=${usuario.id != null ? 'Atualizar' : 'Cadastrar'}, type='submit')}" />
           </div>
         </form>
       </div>

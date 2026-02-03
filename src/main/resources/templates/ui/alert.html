@@ -1,0 +1,205 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <!--
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║  UI ALERT COMPONENTS                                                          ║
+  ║  Uso: <ui:alert th:replace="~{ui/alert :: success(title='...', message='...')}"/>  ║
+  ╚══════════════════════════════════════════════════════════════════════════════╝
+-->
+
+  <!-- ===== Success Alert ===== -->
+  <th:block th:fragment="success(title, message)">
+    <div
+      class="rounded-xl border border-success-500 bg-success-50 p-4 dark:border-success-500/30 dark:bg-success-500/15">
+      <div class="flex items-start gap-3">
+        <div class="-mt-0.5 text-success-500">
+          <svg
+            class="h-6 w-6 fill-current"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M3.70186 12.0001C3.70186 7.41711 7.41711 3.70186 12.0001 3.70186C16.5831 3.70186 20.2984 7.41711 20.2984 12.0001C20.2984 16.5831 16.5831 20.2984 12.0001 20.2984C7.41711 20.2984 3.70186 16.5831 3.70186 12.0001ZM12.0001 1.90186C6.423 1.90186 1.90186 6.423 1.90186 12.0001C1.90186 17.5772 6.423 22.0984 12.0001 22.0984C17.5772 22.0984 22.0984 17.5772 22.0984 12.0001C22.0984 6.423 17.5772 1.90186 12.0001 1.90186ZM15.6197 10.7395C15.9712 10.388 15.9712 9.81819 15.6197 9.46672C15.2683 9.11525 14.6984 9.11525 14.347 9.46672L11.1894 12.6243L9.6533 11.0883C9.30183 10.7368 8.73198 10.7368 8.38051 11.0883C8.02904 11.4397 8.02904 12.0096 8.38051 12.3611L10.553 14.5335C10.7217 14.7023 10.9507 14.7971 11.1894 14.7971C11.428 14.7971 11.657 14.7023 11.8257 14.5335L15.6197 10.7395Z" />
+          </svg>
+        </div>
+        <div>
+          <h4
+            class="mb-1 text-sm font-semibold text-gray-800 dark:text-white/90"
+            th:text="${title}">
+            Sucesso
+          </h4>
+          <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${message}">
+            Operação realizada com sucesso.
+          </p>
+        </div>
+      </div>
+    </div>
+  </th:block>
+
+  <!-- ===== Error Alert ===== -->
+  <th:block th:fragment="error(title, message)">
+    <div
+      class="rounded-xl border border-error-500 bg-error-50 p-4 dark:border-error-500/30 dark:bg-error-500/15">
+      <div class="flex items-start gap-3">
+        <div class="-mt-0.5 text-error-500">
+          <svg
+            class="h-6 w-6 fill-current"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M20.3499 12.0004C20.3499 16.612 16.6115 20.3504 11.9999 20.3504C7.38832 20.3504 3.6499 16.612 3.6499 12.0004C3.6499 7.38881 7.38833 3.65039 11.9999 3.65039C16.6115 3.65039 20.3499 7.38881 20.3499 12.0004ZM11.9999 22.1504C17.6056 22.1504 22.1499 17.6061 22.1499 12.0004C22.1499 6.3947 17.6056 1.85039 11.9999 1.85039C6.39421 1.85039 1.8499 6.3947 1.8499 12.0004C1.8499 17.6061 6.39421 22.1504 11.9999 22.1504ZM13.0008 16.4753C13.0008 15.923 12.5531 15.4753 12.0008 15.4753L11.9998 15.4753C11.4475 15.4753 10.9998 15.923 10.9998 16.4753C10.9998 17.0276 11.4475 17.4753 11.9998 17.4753L12.0008 17.4753C12.5531 17.4753 13.0008 17.0276 13.0008 16.4753ZM11.9998 6.62898C12.414 6.62898 12.7498 6.96476 12.7498 7.37898L12.7498 13.0555C12.7498 13.4697 12.414 13.8055 11.9998 13.8055C11.5856 13.8055 11.2498 13.4697 11.2498 13.0555L11.2498 7.37898C11.2498 6.96476 11.5856 6.62898 11.9998 6.62898Z" />
+          </svg>
+        </div>
+        <div>
+          <h4
+            class="mb-1 text-sm font-semibold text-gray-800 dark:text-white/90"
+            th:text="${title}">
+            Erro
+          </h4>
+          <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${message}">
+            Ocorreu um erro na operação.
+          </p>
+        </div>
+      </div>
+    </div>
+  </th:block>
+
+  <!-- ===== Warning Alert ===== -->
+  <th:block th:fragment="warning(title, message)">
+    <div
+      class="rounded-xl border border-warning-500 bg-warning-50 p-4 dark:border-warning-500/30 dark:bg-warning-500/15">
+      <div class="flex items-start gap-3">
+        <div class="-mt-0.5 text-warning-500">
+          <svg
+            class="h-6 w-6 fill-current"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M12 3.67206C12.4052 3.67206 12.7794 3.88348 12.9823 4.23264L20.8742 17.8137C21.0771 18.1629 21.0771 18.5955 20.8742 18.9447C20.6714 19.2939 20.2971 19.5053 19.892 19.5053H4.10803C3.70287 19.5053 3.32861 19.2939 3.12575 18.9447C2.92289 18.5955 2.92289 18.1629 3.12575 17.8137L11.0177 4.23264C11.2206 3.88348 11.5948 3.67206 12 3.67206ZM12 8.19873C12.4142 8.19873 12.75 8.53452 12.75 8.94873V13.1154C12.75 13.5296 12.4142 13.8654 12 13.8654C11.5858 13.8654 11.25 13.5296 11.25 13.1154V8.94873C11.25 8.53452 11.5858 8.19873 12 8.19873ZM12.9 16.032C12.9 16.5291 12.4971 16.932 12 16.932C11.5029 16.932 11.1 16.5291 11.1 16.032C11.1 15.5349 11.5029 15.132 12 15.132C12.4971 15.132 12.9 15.5349 12.9 16.032Z" />
+          </svg>
+        </div>
+        <div>
+          <h4
+            class="mb-1 text-sm font-semibold text-gray-800 dark:text-white/90"
+            th:text="${title}">
+            Atenção
+          </h4>
+          <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${message}">
+            Verifique as informações antes de continuar.
+          </p>
+        </div>
+      </div>
+    </div>
+  </th:block>
+
+  <!-- ===== Info Alert ===== -->
+  <th:block th:fragment="info(title, message)">
+    <div
+      class="rounded-xl border border-blue-light-500 bg-blue-light-50 p-4 dark:border-blue-light-500/30 dark:bg-blue-light-500/15">
+      <div class="flex items-start gap-3">
+        <div class="-mt-0.5 text-blue-light-500">
+          <svg
+            class="h-6 w-6 fill-current"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M3.70186 12.0001C3.70186 7.41711 7.41711 3.70186 12.0001 3.70186C16.5831 3.70186 20.2984 7.41711 20.2984 12.0001C20.2984 16.5831 16.5831 20.2984 12.0001 20.2984C7.41711 20.2984 3.70186 16.5831 3.70186 12.0001ZM12.0001 1.90186C6.423 1.90186 1.90186 6.423 1.90186 12.0001C1.90186 17.5772 6.423 22.0984 12.0001 22.0984C17.5772 22.0984 22.0984 17.5772 22.0984 12.0001C22.0984 6.423 17.5772 1.90186 12.0001 1.90186ZM12.0001 8.90186C12.5523 8.90186 13.0001 8.45415 13.0001 7.90186C13.0001 7.34958 12.5523 6.90186 12.0001 6.90186C11.4478 6.90186 11.0001 7.34958 11.0001 7.90186C11.0001 8.45415 11.4478 8.90186 12.0001 8.90186ZM12.0001 17.0984C11.5858 17.0984 11.2501 16.7627 11.2501 16.3484V10.6719C11.2501 10.2577 11.5858 9.92188 12.0001 9.92188C12.4143 9.92188 12.7501 10.2577 12.7501 10.6719V16.3484C12.7501 16.7627 12.4143 17.0984 12.0001 17.0984Z" />
+          </svg>
+        </div>
+        <div>
+          <h4
+            class="mb-1 text-sm font-semibold text-gray-800 dark:text-white/90"
+            th:text="${title}">
+            Informação
+          </h4>
+          <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${message}">
+            Confira a informação.
+          </p>
+        </div>
+      </div>
+    </div>
+  </th:block>
+
+  <!-- ===== Dismissible Alert (with close button) ===== -->
+  <th:block th:fragment="dismissible(type, title, message)">
+    <div
+      x-data="{ show: true }"
+      x-show="show"
+      x-transition:leave="transition ease-in duration-200"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
+      th:class="${type == 'success'} ? 'rounded-xl border border-success-500 bg-success-50 p-4 dark:border-success-500/30 dark:bg-success-500/15' :
+               ${type == 'error'} ? 'rounded-xl border border-error-500 bg-error-50 p-4 dark:border-error-500/30 dark:bg-error-500/15' :
+               ${type == 'warning'} ? 'rounded-xl border border-warning-500 bg-warning-50 p-4 dark:border-warning-500/30 dark:bg-warning-500/15' :
+               'rounded-xl border border-blue-light-500 bg-blue-light-50 p-4 dark:border-blue-light-500/30 dark:bg-blue-light-500/15'">
+      <div class="flex items-start justify-between gap-3">
+        <div class="flex items-start gap-3">
+          <div
+            th:class="${type == 'success'} ? '-mt-0.5 text-success-500' :
+                        ${type == 'error'} ? '-mt-0.5 text-error-500' :
+                        ${type == 'warning'} ? '-mt-0.5 text-warning-500' :
+                        '-mt-0.5 text-blue-light-500'">
+            <!-- Success Icon -->
+            <svg th:if="${type == 'success'}" class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M3.70186 12.0001C3.70186 7.41711 7.41711 3.70186 12.0001 3.70186C16.5831 3.70186 20.2984 7.41711 20.2984 12.0001C20.2984 16.5831 16.5831 20.2984 12.0001 20.2984C7.41711 20.2984 3.70186 16.5831 3.70186 12.0001ZM12.0001 1.90186C6.423 1.90186 1.90186 6.423 1.90186 12.0001C1.90186 17.5772 6.423 22.0984 12.0001 22.0984C17.5772 22.0984 22.0984 17.5772 22.0984 12.0001C22.0984 6.423 17.5772 1.90186 12.0001 1.90186ZM15.6197 10.7395C15.9712 10.388 15.9712 9.81819 15.6197 9.46672C15.2683 9.11525 14.6984 9.11525 14.347 9.46672L11.1894 12.6243L9.6533 11.0883C9.30183 10.7368 8.73198 10.7368 8.38051 11.0883C8.02904 11.4397 8.02904 12.0096 8.38051 12.3611L10.553 14.5335C10.7217 14.7023 10.9507 14.7971 11.1894 14.7971C11.428 14.7971 11.657 14.7023 11.8257 14.5335L15.6197 10.7395Z" />
+            </svg>
+            <!-- Error Icon -->
+            <svg th:if="${type == 'error'}" class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M20.3499 12.0004C20.3499 16.612 16.6115 20.3504 11.9999 20.3504C7.38832 20.3504 3.6499 16.612 3.6499 12.0004C3.6499 7.38881 7.38833 3.65039 11.9999 3.65039C16.6115 3.65039 20.3499 7.38881 20.3499 12.0004ZM11.9999 22.1504C17.6056 22.1504 22.1499 17.6061 22.1499 12.0004C22.1499 6.3947 17.6056 1.85039 11.9999 1.85039C6.39421 1.85039 1.8499 6.3947 1.8499 12.0004C1.8499 17.6061 6.39421 22.1504 11.9999 22.1504ZM13.0008 16.4753C13.0008 15.923 12.5531 15.4753 12.0008 15.4753L11.9998 15.4753C11.4475 15.4753 10.9998 15.923 10.9998 16.4753C10.9998 17.0276 11.4475 17.4753 11.9998 17.4753L12.0008 17.4753C12.5531 17.4753 13.0008 17.0276 13.0008 16.4753ZM11.9998 6.62898C12.414 6.62898 12.7498 6.96476 12.7498 7.37898L12.7498 13.0555C12.7498 13.4697 12.414 13.8055 11.9998 13.8055C11.5856 13.8055 11.2498 13.4697 11.2498 13.0555L11.2498 7.37898C11.2498 6.96476 11.5856 6.62898 11.9998 6.62898Z" />
+            </svg>
+            <!-- Warning Icon -->
+            <svg th:if="${type == 'warning'}" class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M12 3.67206C12.4052 3.67206 12.7794 3.88348 12.9823 4.23264L20.8742 17.8137C21.0771 18.1629 21.0771 18.5955 20.8742 18.9447C20.6714 19.2939 20.2971 19.5053 19.892 19.5053H4.10803C3.70287 19.5053 3.32861 19.2939 3.12575 18.9447C2.92289 18.5955 2.92289 18.1629 3.12575 17.8137L11.0177 4.23264C11.2206 3.88348 11.5948 3.67206 12 3.67206ZM12 8.19873C12.4142 8.19873 12.75 8.53452 12.75 8.94873V13.1154C12.75 13.5296 12.4142 13.8654 12 13.8654C11.5858 13.8654 11.25 13.5296 11.25 13.1154V8.94873C11.25 8.53452 11.5858 8.19873 12 8.19873ZM12.9 16.032C12.9 16.5291 12.4971 16.932 12 16.932C11.5029 16.932 11.1 16.5291 11.1 16.032C11.1 15.5349 11.5029 15.132 12 15.132C12.4971 15.132 12.9 15.5349 12.9 16.032Z" />
+            </svg>
+            <!-- Info Icon -->
+            <svg th:if="${type == 'info'}" class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M3.70186 12.0001C3.70186 7.41711 7.41711 3.70186 12.0001 3.70186C16.5831 3.70186 20.2984 7.41711 20.2984 12.0001C20.2984 16.5831 16.5831 20.2984 12.0001 20.2984C7.41711 20.2984 3.70186 16.5831 3.70186 12.0001ZM12.0001 1.90186C6.423 1.90186 1.90186 6.423 1.90186 12.0001C1.90186 17.5772 6.423 22.0984 12.0001 22.0984C17.5772 22.0984 22.0984 17.5772 22.0984 12.0001C22.0984 6.423 17.5772 1.90186 12.0001 1.90186ZM12.0001 8.90186C12.5523 8.90186 13.0001 8.45415 13.0001 7.90186C13.0001 7.34958 12.5523 6.90186 12.0001 6.90186C11.4478 6.90186 11.0001 7.34958 11.0001 7.90186C11.0001 8.45415 11.4478 8.90186 12.0001 8.90186ZM12.0001 17.0984C11.5858 17.0984 11.2501 16.7627 11.2501 16.3484V10.6719C11.2501 10.2577 11.5858 9.92188 12.0001 9.92188C12.4143 9.92188 12.7501 10.2577 12.7501 10.6719V16.3484C12.7501 16.7627 12.4143 17.0984 12.0001 17.0984Z" />
+            </svg>
+          </div>
+          <div>
+            <h4
+              class="mb-1 text-sm font-semibold text-gray-800 dark:text-white/90"
+              th:text="${title}">
+              Título
+            </h4>
+            <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${message}">Mensagem</p>
+          </div>
+        </div>
+        <button
+          @click="show = false"
+          class="text-gray-400 transition hover:text-gray-600 dark:hover:text-gray-300">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </th:block>
+</html>
