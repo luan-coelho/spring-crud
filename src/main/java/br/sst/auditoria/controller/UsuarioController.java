@@ -33,7 +33,7 @@ public class UsuarioController {
 
     // Exibe um usuário específico
     @GetMapping("/{id}")
-    public String show(@PathVariable Long id, Model model) {
+    public String show(@PathVariable String id, Model model) {
         Usuario usuario = usuarioService.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         model.addAttribute("usuario", usuario);
@@ -42,58 +42,58 @@ public class UsuarioController {
 
     // Exibe formulário de edição
     @GetMapping("/{id}/editar")
-    public String editForm(@PathVariable Long id, Model model) {
+    public String editForm(@PathVariable String id, Model model) {
         Usuario usuario = usuarioService.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        usuario.setSenha(""); // Don't expose password
         model.addAttribute("usuario", usuario);
         return "views/usuarios/form";
     }
 
     // Cria um novo usuário
     @PostMapping
-    public String create(@Valid @ModelAttribute Usuario usuario, BindingResult bindingResult,
-                         Model model, RedirectAttributes redirectAttributes) {
-        // Validate password for new users
-        if (usuario.getSenha() == null || usuario.getSenha().isEmpty()) {
-            bindingResult.rejectValue("senha", "error.usuario", "A senha é obrigatória");
-        }
-
+    public String create(@Valid @ModelAttribute("usuario") Usuario usuario, BindingResult bindingResult,
+            Model model, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("usuario", usuario);
             return "views/usuarios/form";
         }
 
-        usuarioService.save(usuario);
-        redirectAttributes.addFlashAttribute("mensagemSucesso", "Usuário criado com sucesso!");
-        return "redirect:/usuarios";
+        try {
+            usuarioService.save(usuario);
+            redirectAttributes.addFlashAttribute("mensagemSucesso", "Usuário criado com sucesso!");
+            return "redirect:/usuarios";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("usuario", usuario);
+            model.addAttribute("errorMessage", e.getMessage());
+            return "views/usuarios/form";
+        }
     }
 
     // Atualiza um usuário existente
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, @Valid @ModelAttribute Usuario usuario,
-                         BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String update(@PathVariable String id, @Valid @ModelAttribute("usuario") Usuario usuario,
+            BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("usuario", usuario);
             return "views/usuarios/form";
         }
 
-        // Handle password update
-        Usuario existing = usuarioService.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-
-        if (usuario.getSenha() == null || usuario.getSenha().isEmpty()) {
-            usuario.setSenha(existing.getSenha());
+        try {
+            usuario.setId(id);
+            usuarioService.save(usuario);
+            redirectAttributes.addFlashAttribute("mensagemSucesso", "Usuário atualizado com sucesso!");
+            return "redirect:/usuarios";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("usuario", usuario);
+            model.addAttribute("errorMessage", e.getMessage());
+            return "views/usuarios/form";
         }
-
-        usuario.setId(id);
-        usuarioService.save(usuario);
-        redirectAttributes.addFlashAttribute("mensagemSucesso", "Usuário atualizado com sucesso!");
-        return "redirect:/usuarios";
     }
 
     // Exclui um usuário
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String delete(@PathVariable String id, RedirectAttributes redirectAttributes) {
         usuarioService.deleteById(id);
         redirectAttributes.addFlashAttribute("mensagemSucesso", "Usuário excluído com sucesso!");
         return "redirect:/usuarios";

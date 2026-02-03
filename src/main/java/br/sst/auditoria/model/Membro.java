@@ -16,9 +16,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "member", indexes = {
-        @Index(name = "member_organizationId_idx", columnList = "organization_id"),
-        @Index(name = "member_userId_idx", columnList = "user_id")
+@Table(name = "membro", indexes = {
+        @Index(name = "membro_organizacao_id_idx", columnList = "organizacao_id"),
+        @Index(name = "membro_usuario_id_idx", columnList = "usuario_id")
 })
 public class Membro implements Serializable {
 
@@ -28,20 +28,20 @@ public class Membro implements Serializable {
 
     @Builder.Default
     @NotBlank(message = "O papel é obrigatório")
-    @Column(name = "role", nullable = false)
+    @Column(name = "papel", nullable = false)
     private String papel = "member";
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "criado_em", nullable = false, updatable = false)
     private LocalDateTime criadoEm;
 
     // Relacionamento com Organizacao
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "organization_id", nullable = false)
+    @JoinColumn(name = "organizacao_id", nullable = false)
     private Organizacao organizacao;
 
     // Relacionamento com Usuario
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 }

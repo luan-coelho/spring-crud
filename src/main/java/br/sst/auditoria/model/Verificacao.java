@@ -18,8 +18,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "verification", indexes = {
-        @Index(name = "verification_identifier_idx", columnList = "identifier")
+@Table(name = "verificacao", indexes = {
+        @Index(name = "verificacao_identificador_idx", columnList = "identificador")
 })
 public class Verificacao implements Serializable {
 
@@ -28,22 +28,22 @@ public class Verificacao implements Serializable {
     private String id;
 
     @NotBlank(message = "O identificador é obrigatório")
-    @Column(name = "identifier", nullable = false)
+    @Column(name = "identificador", nullable = false)
     private String identificador;
 
     @NotBlank(message = "O valor é obrigatório")
-    @Column(name = "value", nullable = false)
+    @Column(name = "valor", nullable = false)
     private String valor;
 
     @NotNull(message = "A data de expiração é obrigatória")
-    @Column(name = "expires_at", nullable = false)
+    @Column(name = "expira_em", nullable = false)
     private LocalDateTime expiraEm;
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "criado_em", nullable = false, updatable = false)
     private LocalDateTime criadoEm;
 
     @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "atualizado_em", nullable = false)
     private LocalDateTime atualizadoEm;
 }

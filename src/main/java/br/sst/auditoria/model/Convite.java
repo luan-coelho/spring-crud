@@ -18,9 +18,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "invitation", indexes = {
-        @Index(name = "invitation_organizationId_idx", columnList = "organization_id"),
-        @Index(name = "invitation_email_idx", columnList = "email")
+@Table(name = "convite", indexes = {
+        @Index(name = "convite_organizacao_id_idx", columnList = "organizacao_id"),
+        @Index(name = "convite_email_idx", columnList = "email")
 })
 public class Convite implements Serializable {
 
@@ -35,7 +35,7 @@ public class Convite implements Serializable {
 
     @Builder.Default
     @NotBlank(message = "O papel é obrigatório")
-    @Column(name = "role", nullable = false)
+    @Column(name = "papel", nullable = false)
     private String papel = "member";
 
     @Builder.Default
@@ -44,20 +44,20 @@ public class Convite implements Serializable {
     private String status = "pending";
 
     @NotNull(message = "A data de expiração é obrigatória")
-    @Column(name = "expires_at", nullable = false)
+    @Column(name = "expira_em", nullable = false)
     private LocalDateTime expiraEm;
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "criado_em", nullable = false, updatable = false)
     private LocalDateTime criadoEm;
 
     // Relacionamento com Organizacao
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "organization_id", nullable = false)
+    @JoinColumn(name = "organizacao_id", nullable = false)
     private Organizacao organizacao;
 
     // Relacionamento com Usuario (convidador)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "inviter_id", nullable = false)
+    @JoinColumn(name = "convidador_id", nullable = false)
     private Usuario convidador;
 }

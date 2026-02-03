@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "account", indexes = {
-        @Index(name = "account_userId_idx", columnList = "user_id")
+@Table(name = "conta", indexes = {
+        @Index(name = "conta_usuario_id_idx", columnList = "usuario_id")
 })
 public class Conta implements Serializable {
 
@@ -27,44 +27,44 @@ public class Conta implements Serializable {
     private String id;
 
     @NotBlank(message = "O ID da conta é obrigatório")
-    @Column(name = "account_id", nullable = false)
+    @Column(name = "conta_id", nullable = false)
     private String contaId;
 
     @NotBlank(message = "O ID do provedor é obrigatório")
-    @Column(name = "provider_id", nullable = false)
+    @Column(name = "provedor_id", nullable = false)
     private String provedorId;
 
-    @Column(name = "access_token")
+    @Column(name = "token_acesso")
     private String tokenAcesso;
 
-    @Column(name = "refresh_token")
+    @Column(name = "token_atualizacao")
     private String tokenAtualizacao;
 
-    @Column(name = "id_token")
+    @Column(name = "token_id")
     private String tokenId;
 
-    @Column(name = "access_token_expires_at")
+    @Column(name = "token_acesso_expira_em")
     private LocalDateTime tokenAcessoExpiraEm;
 
-    @Column(name = "refresh_token_expires_at")
+    @Column(name = "token_atualizacao_expira_em")
     private LocalDateTime tokenAtualizacaoExpiraEm;
 
-    @Column(name = "scope")
+    @Column(name = "escopo")
     private String escopo;
 
-    @Column(name = "password")
+    @Column(name = "senha")
     private String senha;
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "criado_em", nullable = false, updatable = false)
     private LocalDateTime criadoEm;
 
     @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "atualizado_em", nullable = false)
     private LocalDateTime atualizadoEm;
 
     // Relacionamento com Usuario
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 }

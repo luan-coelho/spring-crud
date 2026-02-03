@@ -53,16 +53,16 @@
           <!-- Status Badge -->
           <div class="mt-3">
             <span
-              th:if="${usuario.ativo}"
+              th:if="${usuario.banido}"
+              class="inline-flex items-center gap-1.5 rounded-full bg-error-50 px-3 py-1 text-sm font-medium text-error-700 dark:bg-error-500/15 dark:text-error-500">
+              <span class="h-2 w-2 rounded-full bg-error-500"></span>
+              Banido
+            </span>
+            <span
+              th:unless="${usuario.banido}"
               class="inline-flex items-center gap-1.5 rounded-full bg-success-50 px-3 py-1 text-sm font-medium text-success-700 dark:bg-success-500/15 dark:text-success-500">
               <span class="h-2 w-2 rounded-full bg-success-500"></span>
               Ativo
-            </span>
-            <span
-              th:unless="${usuario.ativo}"
-              class="inline-flex items-center gap-1.5 rounded-full bg-error-50 px-3 py-1 text-sm font-medium text-error-700 dark:bg-error-500/15 dark:text-error-500">
-              <span class="h-2 w-2 rounded-full bg-error-500"></span>
-              Inativo
             </span>
           </div>
         </div>
@@ -175,7 +175,57 @@
               </div>
             </div>
 
-            <!-- Status -->
+            <!-- Telefone -->
+            <div
+              class="flex items-center justify-between rounded-lg bg-gray-50 p-4 dark:bg-gray-900/50">
+              <div class="flex items-center gap-3">
+                <div
+                  class="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Telefone</p>
+                  <p
+                    class="text-sm font-medium text-gray-800 dark:text-white/90"
+                    th:text="${usuario.telefone != null ? usuario.telefone : 'Não informado'}">
+                    (00) 00000-0000
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Papel (Role) -->
+            <div
+              class="flex items-center justify-between rounded-lg bg-gray-50 p-4 dark:bg-gray-900/50">
+              <div class="flex items-center gap-3">
+                <div
+                  class="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Papel</p>
+                  <p class="text-sm font-medium text-gray-800 dark:text-white/90">
+                    <span th:if="${usuario.papel == 'admin'}">Administrador</span>
+                    <span th:if="${usuario.papel == 'moderator'}">Moderador</span>
+                    <span th:if="${usuario.papel == 'user'}">Usuário</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Email Verificado -->
             <div
               class="flex items-center justify-between rounded-lg bg-gray-50 p-4 dark:bg-gray-900/50">
               <div class="flex items-center gap-3">
@@ -190,14 +240,169 @@
                   </svg>
                 </div>
                 <div>
-                  <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Status</p>
+                  <p class="text-xs font-medium text-gray-500 dark:text-gray-400">E-mail Verificado</p>
                   <p
                     class="text-sm font-medium"
-                    th:classappend="${usuario.ativo} ? 'text-success-600 dark:text-success-400' : 'text-error-600 dark:text-error-400'">
-                    <span th:if="${usuario.ativo}">Ativo</span>
-                    <span th:unless="${usuario.ativo}">Inativo</span>
+                    th:classappend="${usuario.emailVerificado} ? 'text-success-600 dark:text-success-400' : 'text-error-600 dark:text-error-400'">
+                    <span th:if="${usuario.emailVerificado}">Sim</span>
+                    <span th:unless="${usuario.emailVerificado}">Não</span>
                   </p>
                 </div>
+              </div>
+            </div>
+
+            <!-- Onboarding Completo -->
+            <div
+              class="flex items-center justify-between rounded-lg bg-gray-50 p-4 dark:bg-gray-900/50">
+              <div class="flex items-center gap-3">
+                <div
+                  class="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Onboarding Completo</p>
+                  <p
+                    class="text-sm font-medium"
+                    th:classappend="${usuario.onboardingCompleto} ? 'text-success-600 dark:text-success-400' : 'text-gray-600 dark:text-gray-400'">
+                    <span th:if="${usuario.onboardingCompleto}">Sim</span>
+                    <span th:unless="${usuario.onboardingCompleto}">Não</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Banido -->
+            <div
+              class="flex items-center justify-between rounded-lg bg-gray-50 p-4 dark:bg-gray-900/50">
+              <div class="flex items-center gap-3">
+                <div
+                  class="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Banido</p>
+                  <p
+                    class="text-sm font-medium"
+                    th:classappend="${usuario.banido} ? 'text-error-600 dark:text-error-400' : 'text-success-600 dark:text-success-400'">
+                    <span th:if="${usuario.banido}">Sim</span>
+                    <span th:unless="${usuario.banido}">Não</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Motivo do Banimento (se banido) -->
+            <div
+              th:if="${usuario.banido && usuario.motivoBanimento != null}"
+              class="flex items-start rounded-lg bg-error-50 p-4 dark:bg-error-500/10">
+              <div class="flex items-start gap-3 w-full">
+                <div
+                  class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-error-100 text-error-500 dark:bg-error-500/20">
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <div class="flex-1">
+                  <p class="text-xs font-medium text-error-700 dark:text-error-400">Motivo do Banimento</p>
+                  <p
+                    class="mt-1 text-sm text-error-800 dark:text-error-300"
+                    th:text="${usuario.motivoBanimento}">
+                    Motivo do banimento
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Data de Expiração do Banimento (se aplicável) -->
+            <div
+              th:if="${usuario.banido && usuario.banimentoExpiraEm != null}"
+              class="flex items-center justify-between rounded-lg bg-gray-50 p-4 dark:bg-gray-900/50">
+              <div class="flex items-center gap-3">
+                <div
+                  class="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Banimento Expira Em</p>
+                  <p
+                    class="text-sm font-medium text-gray-800 dark:text-white/90"
+                    th:text="${#temporals.format(usuario.banimentoExpiraEm, 'dd/MM/yyyy HH:mm')}">
+                    01/01/2024 00:00
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Datas de Criação e Atualização -->
+            <div
+              class="flex items-center justify-between rounded-lg bg-gray-50 p-4 dark:bg-gray-900/50">
+              <div class="flex items-center gap-3">
+                <div
+                  class="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Criado em</p>
+                  <p
+                    class="text-sm font-medium text-gray-800 dark:text-white/90"
+                    th:text="${#temporals.format(usuario.criadoEm, 'dd/MM/yyyy HH:mm')}">
+                    01/01/2024 00:00
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="flex items-center justify-between rounded-lg bg-gray-50 p-4 dark:bg-gray-900/50">
+              <div class="flex items-center gap-3">
+                <div
+                  class="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Última Atualização</p>
+                  <p
+                    class="text-sm font-medium text-gray-800 dark:text-white/90"
+                    th:text="${#temporals.format(usuario.atualizadoEm, 'dd/MM/yyyy HH:mm')}">
+                    01/01/2024 00:00
+                  </p>
+                </div>
+              </div>
+            </div>
               </div>
             </div>
           </div>

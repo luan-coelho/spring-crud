@@ -18,8 +18,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "session", indexes = {
-        @Index(name = "session_userId_idx", columnList = "user_id")
+@Table(name = "sessao", indexes = {
+        @Index(name = "sessao_usuario_id_idx", columnList = "usuario_id")
 })
 public class Sessao implements Serializable {
 
@@ -28,7 +28,7 @@ public class Sessao implements Serializable {
     private String id;
 
     @NotNull(message = "A data de expiração é obrigatória")
-    @Column(name = "expires_at", nullable = false)
+    @Column(name = "expira_em", nullable = false)
     private LocalDateTime expiraEm;
 
     @NotBlank(message = "O token é obrigatório")
@@ -36,27 +36,27 @@ public class Sessao implements Serializable {
     private String token;
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "criado_em", nullable = false, updatable = false)
     private LocalDateTime criadoEm;
 
     @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "atualizado_em", nullable = false)
     private LocalDateTime atualizadoEm;
 
-    @Column(name = "ip_address")
+    @Column(name = "endereco_ip")
     private String enderecoIp;
 
-    @Column(name = "user_agent")
+    @Column(name = "agente_usuario")
     private String agenteUsuario;
 
-    @Column(name = "active_organization_id")
+    @Column(name = "organizacao_ativa_id")
     private String organizacaoAtivaId;
 
-    @Column(name = "impersonated_by")
+    @Column(name = "personificado_por")
     private String personificadoPor;
 
     // Relacionamento com Usuario
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 }

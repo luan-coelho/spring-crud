@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "organization")
+@Table(name = "organizacao")
 public class Organizacao implements Serializable {
 
     @Id
@@ -26,7 +26,7 @@ public class Organizacao implements Serializable {
     private String id;
 
     @NotBlank(message = "O nome é obrigatório")
-    @Column(name = "name", nullable = false)
+    @Column(name = "nome", nullable = false)
     private String nome;
 
     @Column(name = "slug", unique = true)
@@ -35,11 +35,11 @@ public class Organizacao implements Serializable {
     @Column(name = "logo")
     private String logo;
 
-    @Column(name = "metadata", columnDefinition = "TEXT")
+    @Column(name = "metadados", columnDefinition = "TEXT")
     private String metadados;
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "criado_em", nullable = false, updatable = false)
     private LocalDateTime criadoEm;
 
     // Relacionamentos

@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user")
+@Table(name = "usuario")
 public class Usuario implements Serializable {
 
     @Id
@@ -27,7 +27,7 @@ public class Usuario implements Serializable {
     private String id;
 
     @NotBlank(message = "O nome é obrigatório")
-    @Column(name = "name", nullable = false)
+    @Column(name = "nome", nullable = false)
     private String nome;
 
     @NotBlank(message = "O e-mail é obrigatório")
@@ -39,40 +39,40 @@ public class Usuario implements Serializable {
     @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;
 
-    @Column(name = "phone")
+    @Column(name = "telefone")
     private String telefone;
 
     @Builder.Default
-    @Column(name = "email_verified", nullable = false)
+    @Column(name = "email_verificado", nullable = false)
     private Boolean emailVerificado = false;
 
-    @Column(name = "image")
+    @Column(name = "imagem")
     private String imagem;
 
     @Builder.Default
-    @Column(name = "onboarding_completed")
+    @Column(name = "onboarding_completo")
     private Boolean onboardingCompleto = false;
 
     @Builder.Default
-    @Column(name = "role")
+    @Column(name = "papel")
     private String papel = "user";
 
     @Builder.Default
-    @Column(name = "banned")
+    @Column(name = "banido")
     private Boolean banido = false;
 
-    @Column(name = "ban_reason")
+    @Column(name = "motivo_banimento")
     private String motivoBanimento;
 
-    @Column(name = "ban_expires")
+    @Column(name = "banimento_expira_em")
     private LocalDateTime banimentoExpiraEm;
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "criado_em", nullable = false, updatable = false)
     private LocalDateTime criadoEm;
 
     @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "atualizado_em", nullable = false)
     private LocalDateTime atualizadoEm;
 
     // Relacionamentos

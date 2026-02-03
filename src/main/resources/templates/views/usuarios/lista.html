@@ -59,7 +59,15 @@
                     <p class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">CPF</p>
                   </th>
                   <th class="px-5 py-3 text-left sm:px-6">
-                    <p class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">Status</p>
+                    <p class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">Papel</p>
+                  </th>
+                  <th class="px-5 py-3 text-center sm:px-6">
+                    <p class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">
+                      Verificado
+                    </p>
+                  </th>
+                  <th class="px-5 py-3 text-center sm:px-6">
+                    <p class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">Banido</p>
                   </th>
                   <th class="px-5 py-3 text-center sm:px-6">
                     <p class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">Ações</p>
@@ -111,14 +119,54 @@
                   </td>
                   <td class="px-5 py-4 sm:px-6">
                     <span
-                      th:if="${usuario.ativo}"
-                      class="inline-flex rounded-full bg-success-50 px-2.5 py-0.5 text-xs font-medium text-success-700 dark:bg-success-500/15 dark:text-success-500">
-                      Ativo
+                      th:if="${usuario.papel == 'admin'}"
+                      class="inline-flex rounded-full bg-purple-50 px-2.5 py-0.5 text-xs font-medium text-purple-700 dark:bg-purple-500/15 dark:text-purple-400">
+                      Administrador
                     </span>
                     <span
-                      th:unless="${usuario.ativo}"
-                      class="inline-flex rounded-full bg-error-50 px-2.5 py-0.5 text-xs font-medium text-error-700 dark:bg-error-500/15 dark:text-error-500">
-                      Inativo
+                      th:if="${usuario.papel == 'moderator'}"
+                      class="inline-flex rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-500/15 dark:text-blue-400">
+                      Moderador
+                    </span>
+                    <span
+                      th:if="${usuario.papel == 'user'}"
+                      class="inline-flex rounded-full bg-gray-50 px-2.5 py-0.5 text-xs font-medium text-gray-700 dark:bg-gray-500/15 dark:text-gray-400">
+                      Usuário
+                    </span>
+                  </td>
+                  <td class="px-5 py-4 sm:px-6 text-center">
+                    <span
+                      th:if="${usuario.emailVerificado}"
+                      class="text-success-500"
+                      title="E-mail verificado">
+                      <svg class="h-5 w-5 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fill-rule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clip-rule="evenodd" />
+                      </svg>
+                    </span>
+                    <span
+                      th:unless="${usuario.emailVerificado}"
+                      class="text-gray-300 dark:text-gray-600"
+                      title="E-mail não verificado">
+                      <svg class="h-5 w-5 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fill-rule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                          clip-rule="evenodd" />
+                      </svg>
+                    </span>
+                  </td>
+                  <td class="px-5 py-4 sm:px-6 text-center">
+                    <span
+                      th:if="${usuario.banido}"
+                      class="inline-flex rounded-full bg-error-50 px-2.5 py-0.5 text-xs font-medium text-error-700 dark:bg-error-500/15 dark:text-error-500"
+                      th:title="${usuario.motivoBanimento != null ? usuario.motivoBanimento : 'Usuário banido'}">
+                      Sim
+                    </span>
+                    <span th:unless="${usuario.banido}" class="text-gray-400 dark:text-gray-600">
+                      -
                     </span>
                   </td>
                   <td class="px-5 py-4 sm:px-6">
@@ -152,7 +200,7 @@
                 </tr>
                 <!-- Empty State -->
                 <tr th:if="${#lists.isEmpty(usuarios)}">
-                  <td colspan="6" class="px-5 py-12 text-center sm:px-6">
+                  <td colspan="8" class="px-5 py-12 text-center sm:px-6">
                     <div class="flex flex-col items-center">
                       <div
                         class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 text-gray-400 dark:bg-gray-800">
