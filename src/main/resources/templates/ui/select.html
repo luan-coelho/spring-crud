@@ -1,0 +1,316 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <!--
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║  UI SELECT COMPONENTS                                                         ║
+  ║  Uso: <ui:select th:replace="~{ui/select :: default(id, label, ...)}"/>      ║
+  ╚══════════════════════════════════════════════════════════════════════════════╝
+-->
+
+  <!-- ===== Select Default ===== -->
+  <th:block th:fragment="default(id, label, required, options)">
+    <div>
+      <label
+        th:if="${label}"
+        th:for="${id}"
+        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+        <span th:text="${label}">Label</span>
+        <span th:if="${required}" class="text-error-500">*</span>
+      </label>
+      <div class="relative">
+        <select
+          th:id="${id}"
+          th:name="${id}"
+          th:required="${required}"
+          class="shadow-theme-xs h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800">
+          <th:block th:each="option : ${options}">
+            <option
+              th:value="${option.value}"
+              th:text="${option.label}"
+              th:selected="${option.selected}">
+              Option
+            </option>
+          </th:block>
+        </select>
+        <span
+          class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+          <svg class="h-5 w-5 fill-current" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M5.29289 7.29289C5.68342 6.90237 6.31658 6.90237 6.70711 7.29289L10 10.5858L13.2929 7.29289C13.6834 6.90237 14.3166 6.90237 14.7071 7.29289C15.0976 7.68342 15.0976 8.31658 14.7071 8.70711L10.7071 12.7071C10.3166 13.0976 9.68342 13.0976 9.29289 12.7071L5.29289 8.70711C4.90237 8.31658 4.90237 7.68342 5.29289 7.29289Z" />
+          </svg>
+        </span>
+      </div>
+    </div>
+  </th:block>
+
+  <!-- ===== Select with Placeholder ===== -->
+  <th:block th:fragment="withPlaceholder(id, label, placeholder, required, options)">
+    <div>
+      <label
+        th:if="${label}"
+        th:for="${id}"
+        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+        <span th:text="${label}">Label</span>
+        <span th:if="${required}" class="text-error-500">*</span>
+      </label>
+      <div class="relative">
+        <select
+          th:id="${id}"
+          th:name="${id}"
+          th:required="${required}"
+          class="shadow-theme-xs h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800">
+          <option value="" disabled selected th:text="${placeholder}">Selecione uma opção</option>
+          <th:block th:each="option : ${options}">
+            <option
+              th:value="${option.value}"
+              th:text="${option.label}"
+              th:selected="${option.selected}">
+              Option
+            </option>
+          </th:block>
+        </select>
+        <span
+          class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+          <svg class="h-5 w-5 fill-current" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M5.29289 7.29289C5.68342 6.90237 6.31658 6.90237 6.70711 7.29289L10 10.5858L13.2929 7.29289C13.6834 6.90237 14.3166 6.90237 14.7071 7.29289C15.0976 7.68342 15.0976 8.31658 14.7071 8.70711L10.7071 12.7071C10.3166 13.0976 9.68342 13.0976 9.29289 12.7071L5.29289 8.70711C4.90237 8.31658 4.90237 7.68342 5.29289 7.29289Z" />
+          </svg>
+        </span>
+      </div>
+    </div>
+  </th:block>
+
+  <!-- ===== Select with Error ===== -->
+  <th:block th:fragment="withError(id, label, required, options, errorMessage)">
+    <div>
+      <label
+        th:if="${label}"
+        th:for="${id}"
+        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+        <span th:text="${label}">Label</span>
+        <span th:if="${required}" class="text-error-500">*</span>
+      </label>
+      <div class="relative">
+        <select
+          th:id="${id}"
+          th:name="${id}"
+          th:required="${required}"
+          class="shadow-theme-xs h-11 w-full appearance-none rounded-lg border border-error-300 bg-transparent py-2.5 pl-4 pr-10 text-sm text-gray-800 focus:border-error-300 focus:outline-hidden focus:ring-3 focus:ring-error-500/10 dark:border-error-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-error-800">
+          <th:block th:each="option : ${options}">
+            <option
+              th:value="${option.value}"
+              th:text="${option.label}"
+              th:selected="${option.selected}">
+              Option
+            </option>
+          </th:block>
+        </select>
+        <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-error-500">
+          <svg class="h-5 w-5 fill-current" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M5.29289 7.29289C5.68342 6.90237 6.31658 6.90237 6.70711 7.29289L10 10.5858L13.2929 7.29289C13.6834 6.90237 14.3166 6.90237 14.7071 7.29289C15.0976 7.68342 15.0976 8.31658 14.7071 8.70711L10.7071 12.7071C10.3166 13.0976 9.68342 13.0976 9.29289 12.7071L5.29289 8.70711C4.90237 8.31658 4.90237 7.68342 5.29289 7.29289Z" />
+          </svg>
+        </span>
+      </div>
+      <p
+        th:if="${errorMessage}"
+        th:text="${errorMessage}"
+        class="mt-1.5 text-sm text-error-500"></p>
+    </div>
+  </th:block>
+
+  <!-- ===== Select Disabled ===== -->
+  <th:block th:fragment="disabled(id, label, options)">
+    <div>
+      <label
+        th:if="${label}"
+        th:for="${id}"
+        class="mb-1.5 block text-sm font-medium text-gray-300 dark:text-white/15">
+        <span th:text="${label}">Label</span>
+      </label>
+      <div class="relative">
+        <select
+          th:id="${id}"
+          th:name="${id}"
+          disabled
+          class="shadow-theme-xs h-11 w-full appearance-none rounded-lg border border-gray-100 bg-gray-50 py-2.5 pl-4 pr-10 text-sm text-gray-400 dark:border-gray-800 dark:bg-white/3 dark:text-gray-500">
+          <th:block th:each="option : ${options}">
+            <option
+              th:value="${option.value}"
+              th:text="${option.label}"
+              th:selected="${option.selected}">
+              Option
+            </option>
+          </th:block>
+        </select>
+        <span
+          class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-300 dark:text-gray-600">
+          <svg class="h-5 w-5 fill-current" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M5.29289 7.29289C5.68342 6.90237 6.31658 6.90237 6.70711 7.29289L10 10.5858L13.2929 7.29289C13.6834 6.90237 14.3166 6.90237 14.7071 7.29289C15.0976 7.68342 15.0976 8.31658 14.7071 8.70711L10.7071 12.7071C10.3166 13.0976 9.68342 13.0976 9.29289 12.7071L5.29289 8.70711C4.90237 8.31658 4.90237 7.68342 5.29289 7.29289Z" />
+          </svg>
+        </span>
+      </div>
+    </div>
+  </th:block>
+
+  <!-- ===== Multi-Select with Alpine.js ===== -->
+  <th:block th:fragment="multiSelect(id, label, placeholder, options)">
+    <div
+      x-data="{ 
+    open: false, 
+    selected: [],
+    options: [],
+    filter: '',
+    get filteredOptions() {
+      return this.options.filter(o => o.label.toLowerCase().includes(this.filter.toLowerCase()));
+    }
+  }"
+      x-init="options = JSON.parse('[[${#strings.escapeJavaScript(#strings.replace(#strings.replace(options.toString(), '[', ''), ']', ''))}]]' || '[]')"
+      class="relative">
+      <label
+        th:if="${label}"
+        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+        <span th:text="${label}">Label</span>
+      </label>
+      <!-- Hidden inputs for form submission -->
+      <template x-for="val in selected" :key="val">
+        <input type="hidden" th:name="${id}" x-bind:value="val" />
+      </template>
+      <!-- Trigger -->
+      <button
+        type="button"
+        @click="open = !open"
+        @click.away="open = false"
+        class="shadow-theme-xs flex h-11 w-full items-center justify-between rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800">
+        <span
+          x-show="selected.length === 0"
+          class="text-gray-400"
+          th:text="${placeholder} ?: 'Selecione...'">
+          Selecione...
+        </span>
+        <span x-show="selected.length > 0" x-text="selected.length + ' selecionado(s)'"></span>
+        <svg
+          class="h-5 w-5 fill-current text-gray-500 transition-transform"
+          :class="{ 'rotate-180': open }"
+          viewBox="0 0 20 20">
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M5.29289 7.29289C5.68342 6.90237 6.31658 6.90237 6.70711 7.29289L10 10.5858L13.2929 7.29289C13.6834 6.90237 14.3166 6.90237 14.7071 7.29289C15.0976 7.68342 15.0976 8.31658 14.7071 8.70711L10.7071 12.7071C10.3166 13.0976 9.68342 13.0976 9.29289 12.7071L5.29289 8.70711C4.90237 8.31658 4.90237 7.68342 5.29289 7.29289Z" />
+        </svg>
+      </button>
+      <!-- Dropdown -->
+      <div
+        x-show="open"
+        x-transition
+        class="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800"
+        style="display: none">
+        <!-- Search filter -->
+        <div class="border-b border-gray-200 p-2 dark:border-gray-700">
+          <input
+            type="text"
+            x-model="filter"
+            placeholder="Buscar..."
+            class="h-9 w-full rounded-md border border-gray-200 px-3 text-sm focus:border-brand-300 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white" />
+        </div>
+        <!-- Options -->
+        <template x-for="option in filteredOptions" :key="option.value">
+          <label
+            class="flex cursor-pointer items-center gap-3 px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-700">
+            <input
+              type="checkbox"
+              :value="option.value"
+              @change="selected.includes(option.value) ? selected = selected.filter(v => v !== option.value) : selected.push(option.value)"
+              :checked="selected.includes(option.value)"
+              class="h-4 w-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500 dark:border-gray-600" />
+            <span class="text-sm text-gray-700 dark:text-gray-300" x-text="option.label"></span>
+          </label>
+        </template>
+      </div>
+    </div>
+  </th:block>
+
+  <!-- ===== Country Select (with flags) ===== -->
+  <th:block th:fragment="country(id, label, required)">
+    <div
+      x-data="{ 
+    open: false, 
+    selected: null,
+    countries: [
+      { code: 'BR', name: 'Brasil', flag: '🇧🇷' },
+      { code: 'US', name: 'Estados Unidos', flag: '🇺🇸' },
+      { code: 'PT', name: 'Portugal', flag: '🇵🇹' },
+      { code: 'ES', name: 'Espanha', flag: '🇪🇸' },
+      { code: 'AR', name: 'Argentina', flag: '🇦🇷' },
+      { code: 'UK', name: 'Reino Unido', flag: '🇬🇧' },
+      { code: 'DE', name: 'Alemanha', flag: '🇩🇪' },
+      { code: 'FR', name: 'França', flag: '🇫🇷' },
+      { code: 'IT', name: 'Itália', flag: '🇮🇹' },
+      { code: 'JP', name: 'Japão', flag: '🇯🇵' }
+    ],
+    filter: '',
+    get filteredCountries() {
+      return this.countries.filter(c => c.name.toLowerCase().includes(this.filter.toLowerCase()));
+    }
+  }"
+      class="relative">
+      <label
+        th:if="${label}"
+        class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+        <span th:text="${label}">País</span>
+        <span th:if="${required}" class="text-error-500">*</span>
+      </label>
+      <input type="hidden" th:id="${id}" th:name="${id}" x-bind:value="selected?.code" />
+      <!-- Trigger -->
+      <button
+        type="button"
+        @click="open = !open"
+        @click.away="open = false"
+        class="shadow-theme-xs flex h-11 w-full items-center justify-between rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800">
+        <span x-show="!selected" class="text-gray-400">Selecione um país</span>
+        <span x-show="selected" class="flex items-center gap-2">
+          <span x-text="selected?.flag" class="text-lg"></span>
+          <span x-text="selected?.name"></span>
+        </span>
+        <svg class="h-5 w-5 fill-current text-gray-500" viewBox="0 0 20 20">
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M5.29289 7.29289C5.68342 6.90237 6.31658 6.90237 6.70711 7.29289L10 10.5858L13.2929 7.29289C13.6834 6.90237 14.3166 6.90237 14.7071 7.29289C15.0976 7.68342 15.0976 8.31658 14.7071 8.70711L10.7071 12.7071C10.3166 13.0976 9.68342 13.0976 9.29289 12.7071L5.29289 8.70711C4.90237 8.31658 4.90237 7.68342 5.29289 7.29289Z" />
+        </svg>
+      </button>
+      <!-- Dropdown -->
+      <div
+        x-show="open"
+        x-transition
+        class="absolute z-50 mt-2 max-h-60 w-full overflow-auto rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800"
+        style="display: none">
+        <div class="border-b border-gray-200 p-2 dark:border-gray-700">
+          <input
+            type="text"
+            x-model="filter"
+            placeholder="Buscar país..."
+            class="h-9 w-full rounded-md border border-gray-200 px-3 text-sm focus:border-brand-300 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white" />
+        </div>
+        <template x-for="country in filteredCountries" :key="country.code">
+          <button
+            type="button"
+            @click="selected = country; open = false"
+            class="flex w-full items-center gap-3 px-4 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700">
+            <span x-text="country.flag" class="text-lg"></span>
+            <span class="text-sm text-gray-700 dark:text-gray-300" x-text="country.name"></span>
+          </button>
+        </template>
+      </div>
+    </div>
+  </th:block>
+</html>

@@ -1,0 +1,152 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <!--
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║  UI TABS COMPONENTS                                                           ║
+  ║  Uso: <ui:tabs th:replace="~{ui/tabs :: default(tabs)}"/>                    ║
+  ╚══════════════════════════════════════════════════════════════════════════════╝
+-->
+
+  <!-- ===== Tabs Default (underline style) ===== -->
+  <th:block th:fragment="default(activeTab)">
+    <div x-data="{ activeTab: '[[${activeTab}]]' }">
+      <div class="border-b border-gray-200 dark:border-gray-700">
+        <nav class="-mb-px flex gap-6" th:insert="${~{:: tabList}}">
+          <!-- Tab buttons -->
+        </nav>
+      </div>
+      <div class="py-4" th:insert="${~{:: tabPanels}}">
+        <!-- Tab panels -->
+      </div>
+    </div>
+  </th:block>
+
+  <!-- ===== Tab Button ===== -->
+  <th:block th:fragment="tabButton(id, label)">
+    <button
+      type="button"
+      @click="activeTab = '[[${id}]]'"
+      :class="activeTab === '[[${id}]]' 
+      ? 'border-brand-500 text-brand-600 dark:border-brand-400 dark:text-brand-400' 
+      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:text-gray-300'"
+      class="border-b-2 px-1 pb-4 text-sm font-medium transition-colors">
+      <span th:text="${label}">Tab</span>
+    </button>
+  </th:block>
+
+  <!-- ===== Tab Panel ===== -->
+  <th:block th:fragment="tabPanel(id)">
+    <div x-show="activeTab === '[[${id}]]'" x-transition th:insert="${~{:: content}}">
+      <!-- Panel content -->
+    </div>
+  </th:block>
+
+  <!-- ===== Tabs Pill Style ===== -->
+  <th:block th:fragment="pills(activeTab)">
+    <div x-data="{ activeTab: '[[${activeTab}]]' }">
+      <div class="flex gap-2 rounded-lg bg-gray-100 p-1 dark:bg-gray-800">
+        <nav class="flex gap-1" th:insert="${~{:: tabList}}">
+          <!-- Tab buttons -->
+        </nav>
+      </div>
+      <div class="py-4" th:insert="${~{:: tabPanels}}">
+        <!-- Tab panels -->
+      </div>
+    </div>
+  </th:block>
+
+  <!-- ===== Pill Tab Button ===== -->
+  <th:block th:fragment="pillButton(id, label)">
+    <button
+      type="button"
+      @click="activeTab = '[[${id}]]'"
+      :class="activeTab === '[[${id}]]' 
+      ? 'bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:text-white' 
+      : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'"
+      class="rounded-md px-4 py-2 text-sm font-medium transition-colors">
+      <span th:text="${label}">Tab</span>
+    </button>
+  </th:block>
+
+  <!-- ===== Tabs with Icons ===== -->
+  <th:block th:fragment="tabButtonWithIcon(id, label, iconType)">
+    <button
+      type="button"
+      @click="activeTab = '[[${id}]]'"
+      :class="activeTab === '[[${id}]]' 
+      ? 'border-brand-500 text-brand-600 dark:border-brand-400 dark:text-brand-400' 
+      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:text-gray-300'"
+      class="flex items-center gap-2 border-b-2 px-1 pb-4 text-sm font-medium transition-colors">
+      <!-- Home Icon -->
+      <svg th:if="${iconType == 'home'}" class="h-4 w-4 fill-current" viewBox="0 0 20 20">
+        <path d="M10 2.69L2.5 8.5V17.5H7.5V12.5H12.5V17.5H17.5V8.5L10 2.69Z" />
+      </svg>
+      <!-- User Icon -->
+      <svg th:if="${iconType == 'user'}" class="h-4 w-4 fill-current" viewBox="0 0 20 20">
+        <path
+          d="M10 10C12.21 10 14 8.21 14 6C14 3.79 12.21 2 10 2C7.79 2 6 3.79 6 6C6 8.21 7.79 10 10 10ZM10 12C7.33 12 2 13.34 2 16V18H18V16C18 13.34 12.67 12 10 12Z" />
+      </svg>
+      <!-- Settings Icon -->
+      <svg th:if="${iconType == 'settings'}" class="h-4 w-4 fill-current" viewBox="0 0 20 20">
+        <path
+          d="M10 13C11.6569 13 13 11.6569 13 10C13 8.34315 11.6569 7 10 7C8.34315 7 7 8.34315 7 10C7 11.6569 8.34315 13 10 13Z" />
+        <path
+          fill-rule="evenodd"
+          d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18Z"
+          clip-rule="evenodd" />
+      </svg>
+      <!-- Bell Icon -->
+      <svg th:if="${iconType == 'bell'}" class="h-4 w-4 fill-current" viewBox="0 0 20 20">
+        <path
+          d="M10 2C7.79 2 6 3.79 6 6V9L4 11V12H16V11L14 9V6C14 3.79 12.21 2 10 2ZM10 18C10.55 18 11.08 17.78 11.48 17.42C11.88 17.05 12.14 16.55 12.21 16H7.79C7.86 16.55 8.12 17.05 8.52 17.42C8.92 17.78 9.45 18 10 18Z" />
+      </svg>
+      <span th:text="${label}">Tab</span>
+    </button>
+  </th:block>
+
+  <!-- ===== Tabs with Badge Count ===== -->
+  <th:block th:fragment="tabButtonWithBadge(id, label, count)">
+    <button
+      type="button"
+      @click="activeTab = '[[${id}]]'"
+      :class="activeTab === '[[${id}]]' 
+      ? 'border-brand-500 text-brand-600 dark:border-brand-400 dark:text-brand-400' 
+      : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:text-gray-300'"
+      class="flex items-center gap-2 border-b-2 px-1 pb-4 text-sm font-medium transition-colors">
+      <span th:text="${label}">Tab</span>
+      <span
+        th:if="${count != null and count > 0}"
+        class="inline-flex items-center justify-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-300"
+        th:text="${count}">
+        0
+      </span>
+    </button>
+  </th:block>
+
+  <!-- ===== Vertical Tabs ===== -->
+  <th:block th:fragment="vertical(activeTab)">
+    <div x-data="{ activeTab: '[[${activeTab}]]' }" class="flex gap-6">
+      <div class="w-48 shrink-0 border-r border-gray-200 dark:border-gray-700">
+        <nav class="flex flex-col gap-1 pr-4" th:insert="${~{:: tabList}}">
+          <!-- Tab buttons -->
+        </nav>
+      </div>
+      <div class="flex-1" th:insert="${~{:: tabPanels}}">
+        <!-- Tab panels -->
+      </div>
+    </div>
+  </th:block>
+
+  <!-- ===== Vertical Tab Button ===== -->
+  <th:block th:fragment="verticalButton(id, label)">
+    <button
+      type="button"
+      @click="activeTab = '[[${id}]]'"
+      :class="activeTab === '[[${id}]]' 
+      ? 'bg-brand-50 border-brand-500 text-brand-600 dark:bg-brand-500/10 dark:border-brand-400 dark:text-brand-400' 
+      : 'border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-300'"
+      class="w-full border-l-2 px-4 py-2 text-left text-sm font-medium transition-colors">
+      <span th:text="${label}">Tab</span>
+    </button>
+  </th:block>
+</html>

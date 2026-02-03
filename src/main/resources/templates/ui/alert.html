@@ -139,17 +139,17 @@
       x-transition:leave="transition ease-in duration-200"
       x-transition:leave-start="opacity-100"
       x-transition:leave-end="opacity-0"
-      th:class="${type == 'success'} ? 'rounded-xl border border-success-500 bg-success-50 p-4 dark:border-success-500/30 dark:bg-success-500/15' :
-               ${type == 'error'} ? 'rounded-xl border border-error-500 bg-error-50 p-4 dark:border-error-500/30 dark:bg-error-500/15' :
-               ${type == 'warning'} ? 'rounded-xl border border-warning-500 bg-warning-50 p-4 dark:border-warning-500/30 dark:bg-warning-500/15' :
-               'rounded-xl border border-blue-light-500 bg-blue-light-50 p-4 dark:border-blue-light-500/30 dark:bg-blue-light-500/15'">
+      th:class="${type == 'success' ? 'rounded-xl border border-success-500 bg-success-50 p-4 dark:border-success-500/30 dark:bg-success-500/15' :
+               (type == 'error' ? 'rounded-xl border border-error-500 bg-error-50 p-4 dark:border-error-500/30 dark:bg-error-500/15' :
+               (type == 'warning' ? 'rounded-xl border border-warning-500 bg-warning-50 p-4 dark:border-warning-500/30 dark:bg-warning-500/15' :
+               'rounded-xl border border-blue-light-500 bg-blue-light-50 p-4 dark:border-blue-light-500/30 dark:bg-blue-light-500/15'))}">
       <div class="flex items-start justify-between gap-3">
         <div class="flex items-start gap-3">
           <div
-            th:class="${type == 'success'} ? '-mt-0.5 text-success-500' :
-                        ${type == 'error'} ? '-mt-0.5 text-error-500' :
-                        ${type == 'warning'} ? '-mt-0.5 text-warning-500' :
-                        '-mt-0.5 text-blue-light-500'">
+            th:class="${type == 'success' ? '-mt-0.5 text-success-500' :
+                        (type == 'error' ? '-mt-0.5 text-error-500' :
+                        (type == 'warning' ? '-mt-0.5 text-warning-500' :
+                        '-mt-0.5 text-blue-light-500'))}">
             <!-- Success Icon -->
             <svg th:if="${type == 'success'}" class="h-6 w-6 fill-current" viewBox="0 0 24 24">
               <path

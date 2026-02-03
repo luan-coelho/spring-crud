@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:x-transition="http://www.w3.org/1999/xhtml">
   <!-- ===== Preloader ===== -->
   <div
     th:fragment="preloader"
@@ -100,9 +100,8 @@
           <ul class="flex flex-col gap-1 mb-6">
             <!-- Menu Item Dashboard -->
             <li>
-              <a th:href="@{/}" class="menu-item group menu-item-inactive">
+              <a th:href="@{/dashboard}" class="menu-item group">
                 <svg
-                  class="menu-item-icon-inactive"
                   width="24"
                   height="24"
                   viewBox="0 0 24 24"
@@ -122,9 +121,8 @@
 
             <!-- Menu Item Usuários -->
             <li>
-              <a th:href="@{/usuarios}" class="menu-item group menu-item-inactive">
+              <a th:href="@{/usuarios}" class="menu-item group">
                 <svg
-                  class="menu-item-icon-inactive"
                   width="24"
                   height="24"
                   viewBox="0 0 24 24"
@@ -147,9 +145,9 @@
               <a
                 href="#"
                 @click.prevent="selected = (selected === 'Relatorios' ? '':'Relatorios')"
-                class="menu-item group menu-item-inactive">
+                class="menu-item group">
                 <svg
-                  class="menu-item-icon-inactive"
+                  class=""
                   width="24"
                   height="24"
                   viewBox="0 0 24 24"

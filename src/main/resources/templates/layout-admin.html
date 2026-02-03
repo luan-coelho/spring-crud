@@ -79,5 +79,47 @@
       <!-- ===== Content Area End ===== -->
     </div>
     <!-- ===== Page Wrapper End ===== -->
+
+    <!-- Script para ativar item do menu baseado na rota atual -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const currentPath = window.location.pathname
+        const menuItems = document.querySelectorAll('.sidebar .menu-item')
+
+        menuItems.forEach(item => {
+          const href = item.getAttribute('href')
+
+          // Remove classes inativas e ativas de todos os itens
+          item.classList.remove('menu-item-active', 'menu-item-inactive')
+
+          const icon = item.querySelector('svg')
+          if (icon) {
+            icon.classList.remove('menu-item-icon-active', 'menu-item-icon-inactive')
+          }
+
+          // Verifica se o item atual corresponde à rota
+          let isActive = false
+
+          if (href === '/' && (currentPath === '/' || currentPath === '')) {
+            isActive = true
+          } else if (href !== '/' && href !== '#' && currentPath.startsWith(href)) {
+            isActive = true
+          }
+
+          // Aplica as classes apropriadas
+          if (isActive) {
+            item.classList.add('menu-item-active')
+            if (icon) {
+              icon.classList.add('menu-item-icon-active')
+            }
+          } else {
+            item.classList.add('menu-item-inactive')
+            if (icon) {
+              icon.classList.add('menu-item-icon-inactive')
+            }
+          }
+        })
+      })
+    </script>
   </body>
 </html>

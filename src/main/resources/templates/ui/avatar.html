@@ -1,0 +1,143 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <!--
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║  UI AVATAR COMPONENTS                                                         ║
+  ║  Uso: <ui:avatar th:replace="~{ui/avatar :: md(src, alt)}"/>                 ║
+  ╚══════════════════════════════════════════════════════════════════════════════╝
+-->
+
+  <!-- ===== Avatar Extra Small (24px) ===== -->
+  <th:block th:fragment="xs(src, alt)">
+    <div class="h-6 w-6 overflow-hidden rounded-full">
+      <img th:src="${src}" th:alt="${alt}" class="h-full w-full object-cover" />
+    </div>
+  </th:block>
+
+  <!-- ===== Avatar Small (32px) ===== -->
+  <th:block th:fragment="sm(src, alt)">
+    <div class="h-8 w-8 overflow-hidden rounded-full">
+      <img th:src="${src}" th:alt="${alt}" class="h-full w-full object-cover" />
+    </div>
+  </th:block>
+
+  <!-- ===== Avatar Medium (40px) ===== -->
+  <th:block th:fragment="md(src, alt)">
+    <div class="h-10 w-10 overflow-hidden rounded-full">
+      <img th:src="${src}" th:alt="${alt}" class="h-full w-full object-cover" />
+    </div>
+  </th:block>
+
+  <!-- ===== Avatar Large (48px) ===== -->
+  <th:block th:fragment="lg(src, alt)">
+    <div class="h-12 w-12 overflow-hidden rounded-full">
+      <img th:src="${src}" th:alt="${alt}" class="h-full w-full object-cover" />
+    </div>
+  </th:block>
+
+  <!-- ===== Avatar Extra Large (64px) ===== -->
+  <th:block th:fragment="xl(src, alt)">
+    <div class="h-16 w-16 overflow-hidden rounded-full">
+      <img th:src="${src}" th:alt="${alt}" class="h-full w-full object-cover" />
+    </div>
+  </th:block>
+
+  <!-- ===== Avatar 2XL (80px) ===== -->
+  <th:block th:fragment="xxl(src, alt)">
+    <div class="h-20 w-20 overflow-hidden rounded-full">
+      <img th:src="${src}" th:alt="${alt}" class="h-full w-full object-cover" />
+    </div>
+  </th:block>
+
+  <!-- ===== Avatar with Online Status ===== -->
+  <th:block th:fragment="withStatus(src, alt, status)">
+    <div class="relative">
+      <div class="h-10 w-10 overflow-hidden rounded-full">
+        <img th:src="${src}" th:alt="${alt}" class="h-full w-full object-cover" />
+      </div>
+      <span
+        class="absolute bottom-0 right-0 block h-3 w-3 rounded-full border-2 border-white dark:border-gray-900"
+        th:classappend="${status == 'online'} ? 'bg-success-500' : (${status == 'busy'} ? 'bg-error-500' : (${status == 'away'} ? 'bg-warning-500' : 'bg-gray-400'))"></span>
+    </div>
+  </th:block>
+
+  <!-- ===== Avatar with Status Large ===== -->
+  <th:block th:fragment="withStatusLg(src, alt, status)">
+    <div class="relative">
+      <div class="h-14 w-14 overflow-hidden rounded-full">
+        <img th:src="${src}" th:alt="${alt}" class="h-full w-full object-cover" />
+      </div>
+      <span
+        class="absolute bottom-0.5 right-0.5 block h-3.5 w-3.5 rounded-full border-2 border-white dark:border-gray-900"
+        th:classappend="${status == 'online'} ? 'bg-success-500' : (${status == 'busy'} ? 'bg-error-500' : (${status == 'away'} ? 'bg-warning-500' : 'bg-gray-400'))"></span>
+    </div>
+  </th:block>
+
+  <!-- ===== Avatar Placeholder (no image) ===== -->
+  <th:block th:fragment="placeholder(initials, size)">
+    <div
+      th:class="${size == 'xs' ? 'h-6 w-6 text-xs' : (size == 'sm' ? 'h-8 w-8 text-xs' : (size == 'lg' ? 'h-12 w-12 text-base' : (size == 'xl' ? 'h-16 w-16 text-lg' : 'h-10 w-10 text-sm')))}"
+      class="flex items-center justify-center rounded-full bg-brand-500 font-medium text-white">
+      <span th:text="${initials}">AB</span>
+    </div>
+  </th:block>
+
+  <!-- ===== Avatar Group (stacked) ===== -->
+  <th:block th:fragment="group(avatars, maxShow)">
+    <div class="flex -space-x-2">
+      <th:block th:each="avatar, iterStat : ${avatars}">
+        <div
+          th:if="${iterStat.index < (maxShow ?: 4)}"
+          class="h-8 w-8 overflow-hidden rounded-full border-2 border-white dark:border-gray-900">
+          <img th:src="${avatar.src}" th:alt="${avatar.alt}" class="h-full w-full object-cover" />
+        </div>
+      </th:block>
+      <div
+        th:if="${#lists.size(avatars) > (maxShow ?: 4)}"
+        class="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-gray-100 text-xs font-medium text-gray-600 dark:border-gray-900 dark:bg-gray-800 dark:text-gray-400">
+        <span th:text="'+' + (${#lists.size(avatars)} - (${maxShow} ?: 4))">+3</span>
+      </div>
+    </div>
+  </th:block>
+
+  <!-- ===== Avatar with Name ===== -->
+  <th:block th:fragment="withName(src, name, subtitle)">
+    <div class="flex items-center gap-3">
+      <div class="h-10 w-10 overflow-hidden rounded-full">
+        <img th:src="${src}" th:alt="${name}" class="h-full w-full object-cover" />
+      </div>
+      <div>
+        <p class="text-sm font-medium text-gray-800 dark:text-white" th:text="${name}">Nome</p>
+        <p
+          th:if="${subtitle}"
+          class="text-xs text-gray-500 dark:text-gray-400"
+          th:text="${subtitle}">
+          Cargo
+        </p>
+      </div>
+    </div>
+  </th:block>
+
+  <!-- ===== Avatar with Name and Status ===== -->
+  <th:block th:fragment="withNameStatus(src, name, subtitle, status)">
+    <div class="flex items-center gap-3">
+      <div class="relative">
+        <div class="h-10 w-10 overflow-hidden rounded-full">
+          <img th:src="${src}" th:alt="${name}" class="h-full w-full object-cover" />
+        </div>
+        <span
+          class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full border-2 border-white dark:border-gray-900"
+          th:classappend="${status == 'online'} ? 'bg-success-500' : (${status == 'busy'} ? 'bg-error-500' : (${status == 'away'} ? 'bg-warning-500' : 'bg-gray-400'))"></span>
+      </div>
+      <div>
+        <p class="text-sm font-medium text-gray-800 dark:text-white" th:text="${name}">Nome</p>
+        <p
+          th:if="${subtitle}"
+          class="text-xs text-gray-500 dark:text-gray-400"
+          th:text="${subtitle}">
+          Cargo
+        </p>
+      </div>
+    </div>
+  </th:block>
+</html>
