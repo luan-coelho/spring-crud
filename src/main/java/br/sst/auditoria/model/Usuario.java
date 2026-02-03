@@ -6,42 +6,89 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "usuarios")
+@Table(name = "user")
 public class Usuario implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(nullable = false)
+    private String id;
 
     @NotBlank(message = "O nome é obrigatório")
-    @Size(min = 3, max = 100, message = "O nome deve ter entre 3 e 100 caracteres")
-    @Column(nullable = false, length = 100)
+    @Column(name = "name", nullable = false)
     private String nome;
 
     @NotBlank(message = "O e-mail é obrigatório")
     @Email(message = "E-mail inválido")
-    @Size(max = 100, message = "O e-mail deve ter no máximo 100 caracteres")
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
-    private String senha;
-
     @NotBlank(message = "O CPF é obrigatório")
-    @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "CPF deve estar no formato 000.000.000-00")
-    @Column(length = 14, unique = true)
+    @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;
 
-    @Builder.Default
-    @Column(nullable = false)
-    private Boolean ativo = true;
+    @Column(name = "phone")
+    private String telefone;
 
+    @Builder.Default
+    @Column(name = "email_verified", nullable = false)
+    private Boolean emailVerificado = false;
+
+    @Column(name = "image")
+    private String imagem;
+
+    @Builder.Default
+    @Column(name = "onboarding_completed")
+    private Boolean onboardingCompleto = false;
+
+    @Builder.Default
+    @Column(name = "role")
+    private String papel = "user";
+
+    @Builder.Default
+    @Column(name = "banned")
+    private Boolean banido = false;
+
+    @Column(name = "ban_reason")
+    private String motivoBanimento;
+
+    @Column(name = "ban_expires")
+    private LocalDateTime banimentoExpiraEm;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime criadoEm;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime atualizadoEm;
+
+    // Relacionamentos
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Sessao> sessoes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Conta> contas = new ArrayList<>();
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Membro> membros = new ArrayList<>();
+
+    @OneToMany(mappedBy = "convidador", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Convite> convitesEnviados = new ArrayList<>();
 }
