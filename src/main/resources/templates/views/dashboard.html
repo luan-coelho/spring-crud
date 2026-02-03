@@ -1,7 +1,7 @@
 <!doctype html>
 <html
   xmlns:th="http://www.thymeleaf.org"
-  th:replace="~{layout-admin :: layout(~{::content}, 'Dashboard', 'Dashboard')}">
+  th:replace="~{layouts/layout-admin :: layout(~{::content}, 'Dashboard', 'Dashboard')}">
   <body>
     <div th:fragment="content">
       <!-- Grid de Métricas -->

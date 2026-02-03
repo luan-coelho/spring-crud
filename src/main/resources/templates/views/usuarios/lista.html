@@ -3,17 +3,17 @@
   lang="pt-BR"
   xmlns:th="http://www.thymeleaf.org"
   xmlns:ui="http://www.thymeleaf.org"
-  th:replace="~{layout-admin :: layout(~{::content}, 'Usuários', 'Usuários')}">
+  th:replace="~{layouts/layout-admin :: layout(~{::content}, 'Usuários', 'Usuários')}">
   <body>
     <th:block th:fragment="content">
       <!-- Alerts -->
       <div th:if="${mensagemSucesso}" class="mb-6">
         <ui:alert
-          th:replace="~{ui/alert :: dismissible(type='success', title='Sucesso!', message=${mensagemSucesso})}" />
+          th:replace="~{components/alert :: dismissible(type='success', title='Sucesso!', message=${mensagemSucesso})}" />
       </div>
       <div th:if="${mensagemErro}" class="mb-6">
         <ui:alert
-          th:replace="~{ui/alert :: dismissible(type='error', title='Erro!', message=${mensagemErro})}" />
+          th:replace="~{components/alert :: dismissible(type='error', title='Erro!', message=${mensagemErro})}" />
       </div>
 
       <!-- Card Container -->
@@ -33,7 +33,7 @@
           <a
             th:href="@{/usuarios/novo}"
             class="inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 px-4 py-3 text-sm font-medium text-white shadow-theme-xs transition hover:bg-brand-600">
-            <ui:icon th:replace="~{ui/icon :: plus}" />
+            <ui:icon th:replace="~{components/icon :: plus}" />
             Novo Usuário
           </a>
         </div>
@@ -110,12 +110,16 @@
                     </span>
                   </td>
                   <td class="px-5 py-4 sm:px-6">
-                    <ui:badge
+                    <span
                       th:if="${usuario.ativo}"
-                      th:replace="~{ui/badge :: success(text='Ativo')}" />
-                    <ui:badge
+                      class="inline-flex rounded-full bg-success-50 px-2.5 py-0.5 text-xs font-medium text-success-700 dark:bg-success-500/15 dark:text-success-500">
+                      Ativo
+                    </span>
+                    <span
                       th:unless="${usuario.ativo}"
-                      th:replace="~{ui/badge :: error(text='Inativo')}" />
+                      class="inline-flex rounded-full bg-error-50 px-2.5 py-0.5 text-xs font-medium text-error-700 dark:bg-error-500/15 dark:text-error-500">
+                      Inativo
+                    </span>
                   </td>
                   <td class="px-5 py-4 sm:px-6">
                     <div class="flex items-center justify-center gap-2">
@@ -124,14 +128,14 @@
                         th:href="@{/usuarios/{id}(id=${usuario.id})}"
                         class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-500 transition hover:bg-gray-50 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
                         title="Visualizar">
-                        <ui:icon th:replace="~{ui/icon :: view}" />
+                        <ui:icon th:replace="~{components/icon :: view}" />
                       </a>
                       <!-- Botão Editar -->
                       <a
                         th:href="@{/usuarios/{id}/editar(id=${usuario.id})}"
                         class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-500 transition hover:bg-gray-50 hover:text-brand-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-brand-400"
                         title="Editar">
-                        <ui:icon th:replace="~{ui/icon :: edit}" />
+                        <ui:icon th:replace="~{components/icon :: edit}" />
                       </a>
                       <!-- Botão Excluir -->
                       <button
@@ -141,7 +145,7 @@
                         onclick="openDeleteModal(this)"
                         class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-gray-500 transition hover:bg-error-50 hover:text-error-600 hover:border-error-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-error-500/15 dark:hover:text-error-400 dark:hover:border-error-500/30"
                         title="Excluir">
-                        <ui:icon th:replace="~{ui/icon :: delete}" />
+                        <ui:icon th:replace="~{components/icon :: delete}" />
                       </button>
                     </div>
                   </td>
@@ -190,7 +194,7 @@
           x-transition:leave="transition ease-in duration-200"
           x-transition:leave-start="opacity-100"
           x-transition:leave-end="opacity-0"
-          class="fixed inset-0 z-[99998] bg-black/50"
+          class="fixed inset-0 z-99998 bg-black/50"
           @click="open = false"></div>
 
         <!-- Modal Content -->
@@ -202,7 +206,7 @@
           x-transition:leave="transition ease-in duration-200"
           x-transition:leave-start="opacity-100 scale-100"
           x-transition:leave-end="opacity-0 scale-95"
-          class="fixed inset-0 z-[99999] flex items-center justify-center p-4">
+          class="fixed inset-0 z-99999 flex items-center justify-center p-4">
           <div
             class="w-full max-w-md rounded-2xl border border-gray-200 bg-white shadow-xl dark:border-gray-800 dark:bg-gray-900"
             @click.stop>
@@ -234,7 +238,7 @@
               <button
                 @click="open = false"
                 type="button"
-                class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-theme-xs transition hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+                class="inline-flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-theme-xs transition hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/3 dark:hover:text-gray-200">
                 Cancelar
               </button>
               <form

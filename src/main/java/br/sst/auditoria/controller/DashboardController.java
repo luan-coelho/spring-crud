@@ -9,11 +9,12 @@ public class DashboardController {
 
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
-        return "dashboard";
+        return "views/dashboard";
     }
 
     @GetMapping("/")
     public String home() {
         return "redirect:/dashboard";
     }
+
 }
