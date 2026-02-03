@@ -1,0 +1,310 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <!-- ===== Input Text ===== -->
+  <div th:fragment="inputText(id, name, label, placeholder, required)" class="mb-4">
+    <label
+      th:for="${id}"
+      class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+      th:text="${label}">
+      Label
+    </label>
+    <input
+      th:type="'text'"
+      th:id="${id}"
+      th:name="${name}"
+      th:placeholder="${placeholder}"
+      th:required="${required}"
+      class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+  </div>
+
+  <!-- ===== Input Email ===== -->
+  <div th:fragment="inputEmail(id, name, label, placeholder, required)" class="mb-4">
+    <label
+      th:for="${id}"
+      class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+      th:text="${label}">
+      Label
+    </label>
+    <input
+      th:type="'email'"
+      th:id="${id}"
+      th:name="${name}"
+      th:placeholder="${placeholder}"
+      th:required="${required}"
+      class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+  </div>
+
+  <!-- ===== Input Password ===== -->
+  <div
+    th:fragment="inputPassword(id, name, label, placeholder, required)"
+    class="mb-4"
+    x-data="{ showPassword: false }">
+    <label
+      th:for="${id}"
+      class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+      th:text="${label}">
+      Label
+    </label>
+    <div class="relative">
+      <input
+        :type="showPassword ? 'text' : 'password'"
+        th:id="${id}"
+        th:name="${name}"
+        th:placeholder="${placeholder}"
+        th:required="${required}"
+        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pr-10 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+      <button
+        type="button"
+        @click="showPassword = !showPassword"
+        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+        <svg
+          x-show="!showPassword"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+        <svg
+          x-show="showPassword"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== Input Number ===== -->
+  <div th:fragment="inputNumber(id, name, label, placeholder, required, min, max)" class="mb-4">
+    <label
+      th:for="${id}"
+      class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+      th:text="${label}">
+      Label
+    </label>
+    <input
+      th:type="'number'"
+      th:id="${id}"
+      th:name="${name}"
+      th:placeholder="${placeholder}"
+      th:required="${required}"
+      th:min="${min}"
+      th:max="${max}"
+      class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+  </div>
+
+  <!-- ===== Textarea ===== -->
+  <div th:fragment="textarea(id, name, label, placeholder, required, rows)" class="mb-4">
+    <label
+      th:for="${id}"
+      class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+      th:text="${label}">
+      Label
+    </label>
+    <textarea
+      th:id="${id}"
+      th:name="${name}"
+      th:placeholder="${placeholder}"
+      th:required="${required}"
+      th:rows="${rows} ?: 4"
+      class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"></textarea>
+  </div>
+
+  <!-- ===== Select ===== -->
+  <div th:fragment="select(id, name, label, required)" class="mb-4">
+    <label
+      th:for="${id}"
+      class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+      th:text="${label}">
+      Label
+    </label>
+    <div class="relative">
+      <select
+        th:id="${id}"
+        th:name="${name}"
+        th:required="${required}"
+        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pr-10 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+        <th:block th:insert="~{::options}" />
+      </select>
+      <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 9l-7 7-7-7" />
+        </svg>
+      </span>
+    </div>
+  </div>
+
+  <!-- ===== Checkbox ===== -->
+  <div th:fragment="checkbox(id, name, label, checked)" class="mb-4 flex items-center gap-3">
+    <div class="relative flex items-center">
+      <input
+        type="checkbox"
+        th:id="${id}"
+        th:name="${name}"
+        th:checked="${checked}"
+        class="peer h-5 w-5 shrink-0 cursor-pointer appearance-none rounded border border-gray-300 bg-white checked:border-brand-500 checked:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900" />
+      <svg
+        class="pointer-events-none absolute left-0.5 top-0.5 h-4 w-4 text-white opacity-0 peer-checked:opacity-100"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="3">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+      </svg>
+    </div>
+    <label
+      th:for="${id}"
+      class="cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-400"
+      th:text="${label}">
+      Label
+    </label>
+  </div>
+
+  <!-- ===== Radio ===== -->
+  <div th:fragment="radio(id, name, value, label, checked)" class="mb-2 flex items-center gap-3">
+    <div class="relative flex items-center">
+      <input
+        type="radio"
+        th:id="${id}"
+        th:name="${name}"
+        th:value="${value}"
+        th:checked="${checked}"
+        class="peer h-5 w-5 shrink-0 cursor-pointer appearance-none rounded-full border border-gray-300 bg-white checked:border-[6px] checked:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:checked:border-brand-500" />
+    </div>
+    <label
+      th:for="${id}"
+      class="cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-400"
+      th:text="${label}">
+      Label
+    </label>
+  </div>
+
+  <!-- ===== Toggle/Switch ===== -->
+  <div
+    th:fragment="toggle(id, name, label, checked)"
+    class="mb-4 flex items-center justify-between">
+    <label
+      th:for="${id}"
+      class="text-sm font-medium text-gray-700 dark:text-gray-400"
+      th:text="${label}">
+      Label
+    </label>
+    <label class="relative inline-flex cursor-pointer items-center">
+      <input
+        type="checkbox"
+        th:id="${id}"
+        th:name="${name}"
+        th:checked="${checked}"
+        class="peer sr-only" />
+      <div
+        class="h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-brand-500 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-brand-500/20 dark:bg-gray-700 dark:after:border-gray-600"></div>
+    </label>
+  </div>
+
+  <!-- ===== Date Input ===== -->
+  <div th:fragment="inputDate(id, name, label, required)" class="mb-4">
+    <label
+      th:for="${id}"
+      class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+      th:text="${label}">
+      Label
+    </label>
+    <div class="relative">
+      <input
+        th:type="'date'"
+        th:id="${id}"
+        th:name="${name}"
+        th:required="${required}"
+        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90" />
+    </div>
+  </div>
+
+  <!-- ===== Input with Icon Left ===== -->
+  <div th:fragment="inputWithIconLeft(id, name, type, label, placeholder, required)" class="mb-4">
+    <label
+      th:for="${id}"
+      class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+      th:text="${label}">
+      Label
+    </label>
+    <div class="relative">
+      <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+        <th:block th:insert="~{::iconContent}" />
+      </span>
+      <input
+        th:type="${type} ?: 'text'"
+        th:id="${id}"
+        th:name="${name}"
+        th:placeholder="${placeholder}"
+        th:required="${required}"
+        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-12 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+    </div>
+  </div>
+
+  <!-- ===== File Input ===== -->
+  <div th:fragment="inputFile(id, name, label, accept, required)" class="mb-4">
+    <label
+      th:for="${id}"
+      class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+      th:text="${label}">
+      Label
+    </label>
+    <input
+      th:type="'file'"
+      th:id="${id}"
+      th:name="${name}"
+      th:accept="${accept}"
+      th:required="${required}"
+      class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 file:mr-4 file:rounded-lg file:border-0 file:bg-brand-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-brand-600 hover:file:bg-brand-100 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:file:bg-brand-500/10 dark:file:text-brand-400" />
+  </div>
+
+  <!-- ===== Form Error Message ===== -->
+  <p th:fragment="formError(message)" class="mt-1.5 text-xs text-error-500" th:text="${message}">
+    Mensagem de erro
+  </p>
+
+  <!-- ===== Form Helper Text ===== -->
+  <p
+    th:fragment="formHelper(message)"
+    class="mt-1.5 text-xs text-gray-500 dark:text-gray-400"
+    th:text="${message}">
+    Texto de ajuda
+  </p>
+
+  <!-- ===== Input with Error State ===== -->
+  <div th:fragment="inputTextError(id, name, label, placeholder, errorMessage)" class="mb-4">
+    <label
+      th:for="${id}"
+      class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+      th:text="${label}">
+      Label
+    </label>
+    <input
+      th:type="'text'"
+      th:id="${id}"
+      th:name="${name}"
+      th:placeholder="${placeholder}"
+      class="shadow-theme-xs h-11 w-full rounded-lg border border-error-500 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:border-error-500 focus:ring-3 focus:ring-error-500/10 focus:outline-hidden dark:border-error-500 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+    <p class="mt-1.5 text-xs text-error-500" th:text="${errorMessage}">Mensagem de erro</p>
+  </div>
+</html>

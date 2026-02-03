@@ -15,7 +15,7 @@ node {
 }
 
 task buildCss(type: NpmTask) {
-	args = ['run', 'build:css']
+	args = ['run', 'build:tailwindcss']
 	dependsOn npmInstall
 }
 

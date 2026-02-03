@@ -1,0 +1,196 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <!-- ===== Alert Success ===== -->
+  <div
+    th:fragment="alertSuccess(title, message)"
+    class="rounded-xl border border-success-500 bg-success-50 p-4 dark:border-success-500/30 dark:bg-success-500/15">
+    <div class="flex items-start gap-3">
+      <div class="-mt-0.5 text-success-500">
+        <svg
+          class="fill-current"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M3.70186 12.0001C3.70186 7.41711 7.41711 3.70186 12.0001 3.70186C16.5831 3.70186 20.2984 7.41711 20.2984 12.0001C20.2984 16.5831 16.5831 20.2984 12.0001 20.2984C7.41711 20.2984 3.70186 16.5831 3.70186 12.0001ZM12.0001 1.90186C6.423 1.90186 1.90186 6.423 1.90186 12.0001C1.90186 17.5772 6.423 22.0984 12.0001 22.0984C17.5772 22.0984 22.0984 17.5772 22.0984 12.0001C22.0984 6.423 17.5772 1.90186 12.0001 1.90186ZM15.6197 10.7395C15.9712 10.388 15.9712 9.81819 15.6197 9.46672C15.2683 9.11525 14.6984 9.11525 14.347 9.46672L11.1894 12.6243L9.6533 11.0883C9.30183 10.7368 8.73198 10.7368 8.38051 11.0883C8.02904 11.4397 8.02904 12.0096 8.38051 12.3611L10.553 14.5335C10.7217 14.7023 10.9507 14.7971 11.1894 14.7971C11.428 14.7971 11.657 14.7023 11.8257 14.5335L15.6197 10.7395Z"
+            fill="" />
+        </svg>
+      </div>
+      <div>
+        <h4 class="mb-1 text-sm font-semibold text-gray-800 dark:text-white/90" th:text="${title}">
+          Sucesso
+        </h4>
+        <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${message}">
+          Operação realizada com sucesso.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Alert Error ===== -->
+  <div
+    th:fragment="alertError(title, message)"
+    class="rounded-xl border border-error-500 bg-error-50 p-4 dark:border-error-500/30 dark:bg-error-500/15">
+    <div class="flex items-start gap-3">
+      <div class="-mt-0.5 text-error-500">
+        <svg
+          class="fill-current"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M20.3499 12.0004C20.3499 16.612 16.6115 20.3504 11.9999 20.3504C7.38832 20.3504 3.6499 16.612 3.6499 12.0004C3.6499 7.38881 7.38833 3.65039 11.9999 3.65039C16.6115 3.65039 20.3499 7.38881 20.3499 12.0004ZM11.9999 22.1504C17.6056 22.1504 22.1499 17.6061 22.1499 12.0004C22.1499 6.3947 17.6056 1.85039 11.9999 1.85039C6.39421 1.85039 1.8499 6.3947 1.8499 12.0004C1.8499 17.6061 6.39421 22.1504 11.9999 22.1504ZM13.0008 16.4753C13.0008 15.923 12.5531 15.4753 12.0008 15.4753L11.9998 15.4753C11.4475 15.4753 10.9998 15.923 10.9998 16.4753C10.9998 17.0276 11.4475 17.4753 11.9998 17.4753L12.0008 17.4753C12.5531 17.4753 13.0008 17.0276 13.0008 16.4753ZM11.9998 6.62898C12.414 6.62898 12.7498 6.96476 12.7498 7.37898L12.7498 13.0555C12.7498 13.4697 12.414 13.8055 11.9998 13.8055C11.5856 13.8055 11.2498 13.4697 11.2498 13.0555L11.2498 7.37898C11.2498 6.96476 11.5856 6.62898 11.9998 6.62898Z"
+            fill="#F04438" />
+        </svg>
+      </div>
+      <div>
+        <h4 class="mb-1 text-sm font-semibold text-gray-800 dark:text-white/90" th:text="${title}">
+          Erro
+        </h4>
+        <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${message}">
+          Ocorreu um erro na operação.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Alert Warning ===== -->
+  <div
+    th:fragment="alertWarning(title, message)"
+    class="rounded-xl border border-warning-500 bg-warning-50 p-4 dark:border-warning-500/30 dark:bg-warning-500/15">
+    <div class="flex items-start gap-3">
+      <div class="-mt-0.5 text-warning-500">
+        <svg
+          class="fill-current"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M12 3.67206C12.4052 3.67206 12.7794 3.88348 12.9823 4.23264L20.8742 17.8137C21.0771 18.1629 21.0771 18.5955 20.8742 18.9447C20.6714 19.2939 20.2971 19.5053 19.892 19.5053H4.10803C3.70287 19.5053 3.32861 19.2939 3.12575 18.9447C2.92289 18.5955 2.92289 18.1629 3.12575 17.8137L11.0177 4.23264C11.2206 3.88348 11.5948 3.67206 12 3.67206ZM12 8.19873C12.4142 8.19873 12.75 8.53452 12.75 8.94873V13.1154C12.75 13.5296 12.4142 13.8654 12 13.8654C11.5858 13.8654 11.25 13.5296 11.25 13.1154V8.94873C11.25 8.53452 11.5858 8.19873 12 8.19873ZM12.9 16.032C12.9 16.5291 12.4971 16.932 12 16.932C11.5029 16.932 11.1 16.5291 11.1 16.032C11.1 15.5349 11.5029 15.132 12 15.132C12.4971 15.132 12.9 15.5349 12.9 16.032Z"
+            fill="#F79009" />
+        </svg>
+      </div>
+      <div>
+        <h4 class="mb-1 text-sm font-semibold text-gray-800 dark:text-white/90" th:text="${title}">
+          Atenção
+        </h4>
+        <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${message}">
+          Verifique as informações antes de continuar.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Alert Info ===== -->
+  <div
+    th:fragment="alertInfo(title, message)"
+    class="rounded-xl border border-blue-light-500 bg-blue-light-50 p-4 dark:border-blue-light-500/30 dark:bg-blue-light-500/15">
+    <div class="flex items-start gap-3">
+      <div class="-mt-0.5 text-blue-light-500">
+        <svg
+          class="fill-current"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M3.70186 12.0001C3.70186 7.41711 7.41711 3.70186 12.0001 3.70186C16.5831 3.70186 20.2984 7.41711 20.2984 12.0001C20.2984 16.5831 16.5831 20.2984 12.0001 20.2984C7.41711 20.2984 3.70186 16.5831 3.70186 12.0001ZM12.0001 1.90186C6.423 1.90186 1.90186 6.423 1.90186 12.0001C1.90186 17.5772 6.423 22.0984 12.0001 22.0984C17.5772 22.0984 22.0984 17.5772 22.0984 12.0001C22.0984 6.423 17.5772 1.90186 12.0001 1.90186ZM12 7.5C12.4142 7.5 12.75 7.83579 12.75 8.25V8.26C12.75 8.67421 12.4142 9.01 12 9.01C11.5858 9.01 11.25 8.67421 11.25 8.26V8.25C11.25 7.83579 11.5858 7.5 12 7.5ZM12 10.5C12.4142 10.5 12.75 10.8358 12.75 11.25V15.75C12.75 16.1642 12.4142 16.5 12 16.5C11.5858 16.5 11.25 16.1642 11.25 15.75V11.25C11.25 10.8358 11.5858 10.5 12 10.5Z"
+            fill="#0BA5EC" />
+        </svg>
+      </div>
+      <div>
+        <h4 class="mb-1 text-sm font-semibold text-gray-800 dark:text-white/90" th:text="${title}">
+          Informação
+        </h4>
+        <p class="text-sm text-gray-500 dark:text-gray-400" th:text="${message}">
+          Esta é uma mensagem informativa.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Toast Success (com Alpine.js) ===== -->
+  <div
+    th:fragment="toastSuccess(message)"
+    x-data="{ show: true }"
+    x-show="show"
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="opacity-0 translate-y-2"
+    x-transition:enter-end="opacity-100 translate-y-0"
+    x-transition:leave="transition ease-in duration-200"
+    x-transition:leave-start="opacity-100 translate-y-0"
+    x-transition:leave-end="opacity-0 translate-y-2"
+    x-init="setTimeout(() => show = false, 5000)"
+    class="fixed bottom-4 right-4 z-50 flex items-center gap-3 rounded-lg border border-success-500 bg-success-50 p-4 shadow-lg dark:border-success-500/30 dark:bg-success-500/15">
+    <div class="text-success-500">
+      <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+        <path
+          fill-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+          clip-rule="evenodd" />
+      </svg>
+    </div>
+    <p class="text-sm text-gray-800 dark:text-white/90" th:text="${message}">
+      Operação realizada com sucesso!
+    </p>
+    <button
+      @click="show = false"
+      class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+      <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+        <path
+          fill-rule="evenodd"
+          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+          clip-rule="evenodd" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- ===== Toast Error (com Alpine.js) ===== -->
+  <div
+    th:fragment="toastError(message)"
+    x-data="{ show: true }"
+    x-show="show"
+    x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="opacity-0 translate-y-2"
+    x-transition:enter-end="opacity-100 translate-y-0"
+    x-transition:leave="transition ease-in duration-200"
+    x-transition:leave-start="opacity-100 translate-y-0"
+    x-transition:leave-end="opacity-0 translate-y-2"
+    x-init="setTimeout(() => show = false, 5000)"
+    class="fixed bottom-4 right-4 z-50 flex items-center gap-3 rounded-lg border border-error-500 bg-error-50 p-4 shadow-lg dark:border-error-500/30 dark:bg-error-500/15">
+    <div class="text-error-500">
+      <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+        <path
+          fill-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+          clip-rule="evenodd" />
+      </svg>
+    </div>
+    <p class="text-sm text-gray-800 dark:text-white/90" th:text="${message}">Ocorreu um erro!</p>
+    <button
+      @click="show = false"
+      class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+      <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+        <path
+          fill-rule="evenodd"
+          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+          clip-rule="evenodd" />
+      </svg>
+    </button>
+  </div>
+</html>
