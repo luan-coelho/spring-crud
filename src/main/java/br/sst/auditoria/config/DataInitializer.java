@@ -32,12 +32,12 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
         // Verifica se já existe um usuário admin
-        if (!usuarioRepository.existsByEmail("admin@sst.com.br")) {
+        if (!usuarioRepository.existsByEmail("admin@gmail.com")) {
             // Cria o usuário admin
             Usuario admin = Usuario.builder()
                     .id(UUID.randomUUID().toString())
                     .nome("Administrador")
-                    .email("admin@sst.com.br")
+                    .email("admin@gmail.com")
                     .cpf("000.000.000-00")
                     .emailVerificado(true)
                     .papel("admin")
@@ -60,7 +60,7 @@ public class DataInitializer implements CommandLineRunner {
 
             System.out.println("==============================================");
             System.out.println("Usuário admin criado com sucesso!");
-            System.out.println("E-mail: admin@sst.com.br");
+            System.out.println("E-mail: admin@gmail.com");
             System.out.println("Senha: admin123");
             System.out.println("ATENÇÃO: Altere a senha em produção!");
             System.out.println("==============================================");

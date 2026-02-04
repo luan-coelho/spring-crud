@@ -16,18 +16,18 @@ layer(base);
   --font-outfit: 'Outfit', sans-serif;
 
   /* Brand Colors */
-  --color-brand-25: #f6f8ff;
-  --color-brand-50: #eff4ff;
-  --color-brand-100: #d1e0ff;
-  --color-brand-200: #b2ccff;
-  --color-brand-300: #84adff;
-  --color-brand-400: #528bff;
-  --color-brand-500: #465fff;
-  --color-brand-600: #3641f5;
-  --color-brand-700: #2f36d8;
-  --color-brand-800: #2930af;
-  --color-brand-900: #282e89;
-  --color-brand-950: #181b50;
+  --color-brand-25: #f0fdf9;
+  --color-brand-50: #e6fcf5;
+  --color-brand-100: #ccf9eb;
+  --color-brand-200: #99f3d7;
+  --color-brand-300: #66edc3;
+  --color-brand-400: #33e7af;
+  --color-brand-500: #00dc82;
+  --color-brand-600: #00b068;
+  --color-brand-700: #00844e;
+  --color-brand-800: #005834;
+  --color-brand-900: #002c1a;
+  --color-brand-950: #00160d;
 
   /* Success Colors (Green) */
   --color-success-50: #ecfdf3;
