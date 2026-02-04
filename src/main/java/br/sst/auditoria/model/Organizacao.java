@@ -13,6 +13,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entidade Organização (Better Auth)
+ * Representa uma organização multi-tenant
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -42,7 +46,10 @@ public class Organizacao implements Serializable {
     @Column(name = "criado_em", nullable = false, updatable = false)
     private LocalDateTime criadoEm;
 
-    // Relacionamentos
+    // ========================================================================
+    // Relacionamentos Better Auth
+    // ========================================================================
+    
     @OneToMany(mappedBy = "organizacao", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Membro> membros = new ArrayList<>();
@@ -50,4 +57,36 @@ public class Organizacao implements Serializable {
     @OneToMany(mappedBy = "organizacao", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Convite> convites = new ArrayList<>();
+
+    @OneToMany(mappedBy = "organizacao", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<PapelOrganizacao> papeis = new ArrayList<>();
+
+    // ========================================================================
+    // Relacionamentos de Negócio (SST)
+    // ========================================================================
+
+    @OneToMany(mappedBy = "organizacao", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Endereco> enderecos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "organizacao", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Empresa> empresas = new ArrayList<>();
+
+    @OneToMany(mappedBy = "organizacao", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Unidade> unidades = new ArrayList<>();
+
+    @OneToMany(mappedBy = "organizacao", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Setor> setores = new ArrayList<>();
+
+    @OneToMany(mappedBy = "organizacao", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Cargo> cargos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "organizacao", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Funcionario> funcionarios = new ArrayList<>();
 }

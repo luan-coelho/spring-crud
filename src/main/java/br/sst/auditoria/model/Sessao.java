@@ -13,13 +13,19 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * Entidade Sessão (Better Auth)
+ * Armazena sessões de usuário com organização ativa
+ */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "sessao", indexes = {
-        @Index(name = "sessao_usuario_id_idx", columnList = "usuario_id")
+        @Index(name = "idx_sessao_usuario_id", columnList = "usuario_id"),
+        @Index(name = "idx_sessao_organizacao_ativa_id", columnList = "organizacao_ativa_id"),
+        @Index(name = "idx_sessao_token", columnList = "token")
 })
 public class Sessao implements Serializable {
 
@@ -49,9 +55,6 @@ public class Sessao implements Serializable {
     @Column(name = "agente_usuario")
     private String agenteUsuario;
 
-    @Column(name = "organizacao_ativa_id")
-    private String organizacaoAtivaId;
-
     @Column(name = "personificado_por")
     private String personificadoPor;
 
@@ -59,4 +62,9 @@ public class Sessao implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
+
+    // Relacionamento com Organizacao (organização ativa na sessão)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organizacao_ativa_id")
+    private Organizacao organizacaoAtiva;
 }
