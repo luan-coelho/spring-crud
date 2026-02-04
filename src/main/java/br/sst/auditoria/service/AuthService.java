@@ -1,57 +1,86 @@
 package br.sst.auditoria.service;
 
+import br.sst.auditoria.dto.auth.AuthResponse;
+import br.sst.auditoria.dto.auth.ChangePasswordRequest;
+import br.sst.auditoria.dto.auth.LoginRequest;
+import br.sst.auditoria.dto.auth.RegisterRequest;
+import br.sst.auditoria.exception.BusinessException;
+import br.sst.auditoria.exception.ResourceNotFoundException;
+import br.sst.auditoria.exception.UnauthorizedException;
+import br.sst.auditoria.mapper.AuthMapper;
 import br.sst.auditoria.model.Conta;
 import br.sst.auditoria.model.Usuario;
 import br.sst.auditoria.repository.ContaRepository;
 import br.sst.auditoria.repository.UsuarioRepository;
 import br.sst.auditoria.security.CustomUserDetails;
+import br.sst.auditoria.security.jwt.JwtUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
     private final UsuarioRepository usuarioRepository;
     private final ContaRepository contaRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
+    private final AuthMapper authMapper;
 
-    public AuthService(UsuarioRepository usuarioRepository,
-            ContaRepository contaRepository,
-            PasswordEncoder passwordEncoder) {
-        this.usuarioRepository = usuarioRepository;
-        this.contaRepository = contaRepository;
-        this.passwordEncoder = passwordEncoder;
+    /**
+     * Realiza login do usuário
+     */
+    @Transactional(readOnly = true)
+    public AuthResponse login(LoginRequest request) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.email(),
+                        request.password()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        return authMapper.toResponse(jwt, userDetails);
     }
 
     /**
-     * Registra um novo usuário no sistema
+     * Registra um novo usuário e retorna o token de autenticação
      */
     @Transactional
-    public Usuario registrar(String nome, String email, String cpf, String senha, String telefone) {
+    public AuthResponse registrar(RegisterRequest request) {
+        // Validação de confirmação de senha
+        if (!request.senha().equals(request.confirmarSenha())) {
+            throw new BusinessException("As senhas não coincidem");
+        }
+
         // Verifica se o e-mail já está em uso
-        if (usuarioRepository.existsByEmail(email)) {
-            throw new IllegalArgumentException("E-mail já cadastrado");
+        if (usuarioRepository.existsByEmail(request.email())) {
+            throw new BusinessException("E-mail já cadastrado");
         }
 
         // Verifica se o CPF já está em uso
-        if (usuarioRepository.existsByCpf(cpf)) {
-            throw new IllegalArgumentException("CPF já cadastrado");
+        if (usuarioRepository.existsByCpf(request.cpf())) {
+            throw new BusinessException("CPF já cadastrado");
         }
 
         // Cria o usuário
         Usuario usuario = Usuario.builder()
                 .id(UUID.randomUUID().toString())
-                .nome(nome)
-                .email(email)
-                .cpf(cpf)
-                .telefone(telefone)
-                .emailVerificado(true) // Por padrão, marca como verificado (ajustar conforme necessidade)
+                .nome(request.nome())
+                .email(request.email())
+                .cpf(request.cpf())
+                .telefone(request.telefone())
+                .emailVerificado(true)
                 .papel("user")
                 .banido(false)
                 .onboardingCompleto(false)
@@ -63,55 +92,80 @@ public class AuthService {
         Conta conta = Conta.builder()
                 .id(UUID.randomUUID().toString())
                 .contaId(usuario.getId())
-                .provedorId("credentials") // Provedor de credenciais locais
-                .senha(passwordEncoder.encode(senha))
+                .provedorId("credentials")
+                .senha(passwordEncoder.encode(request.senha()))
                 .usuario(usuario)
                 .build();
 
         contaRepository.save(conta);
 
-        return usuario;
+        // Autentica o usuário recém-criado
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.email(),
+                        request.senha()));
+
+        String jwt = jwtUtils.generateJwtToken(authentication);
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        return authMapper.toResponse(jwt, userDetails);
     }
 
     /**
-     * Altera a senha do usuário
+     * Obtém informações do usuário autenticado
+     */
+    @Transactional(readOnly = true)
+    public AuthResponse getUsuarioAutenticado() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()
+                || "anonymousUser".equals(authentication.getPrincipal())) {
+            throw new UnauthorizedException("Usuário não autenticado");
+        }
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        return new AuthResponse(
+                null,
+                null,
+                userDetails.getId(),
+                userDetails.getNome(),
+                userDetails.getEmail(),
+                userDetails.getPapel(),
+                userDetails.getImagem()
+        );
+    }
+
+    /**
+     * Altera a senha do usuário autenticado
      */
     @Transactional
-    public void alterarSenha(String usuarioId, String senhaAtual, String novaSenha) {
+    public void alterarSenha(ChangePasswordRequest request) {
+        // Validação de confirmação de senha
+        if (!request.novaSenha().equals(request.confirmarNovaSenha())) {
+            throw new BusinessException("As senhas não coincidem");
+        }
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        String usuarioId = userDetails.getId();
+
+        // Busca o usuário
         Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário", "id", usuarioId));
 
         // Busca a conta de credenciais
         Conta conta = contaRepository.findByUsuarioIdAndProvedorId(usuarioId, "credentials")
-                .orElseThrow(() -> new IllegalArgumentException("Conta de credenciais não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Conta de credenciais não encontrada"));
 
         // Verifica a senha atual
-        if (!passwordEncoder.matches(senhaAtual, conta.getSenha())) {
-            throw new IllegalArgumentException("Senha atual incorreta");
+        if (!passwordEncoder.matches(request.senhaAtual(), conta.getSenha())) {
+            throw new BusinessException("Senha atual incorreta");
         }
 
         // Atualiza a senha
-        conta.setSenha(passwordEncoder.encode(novaSenha));
+        conta.setSenha(passwordEncoder.encode(request.novaSenha()));
         contaRepository.save(conta);
-    }
-
-    /**
-     * Obtém o usuário atualmente autenticado
-     */
-    public Optional<Usuario> getUsuarioAutenticado() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return Optional.empty();
-        }
-
-        Object principal = authentication.getPrincipal();
-
-        if (principal instanceof CustomUserDetails) {
-            return Optional.of(((CustomUserDetails) principal).getUsuario());
-        }
-
-        return Optional.empty();
     }
 
     /**

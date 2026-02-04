@@ -1,102 +1,79 @@
 package br.sst.auditoria.controller;
 
-import br.sst.auditoria.model.Usuario;
+import br.sst.auditoria.dto.usuario.UsuarioRequest;
+import br.sst.auditoria.dto.usuario.UsuarioResponse;
 import br.sst.auditoria.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
+/**
+ * Controller responsável pelos endpoints de gerenciamento de usuários.
+ * Toda a lógica de negócio está encapsulada no UsuarioService.
+ */
+@RestController
+@RequestMapping("/api/usuarios")
 @RequiredArgsConstructor
-@Controller
-@RequestMapping("/usuarios")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
-    // Lista todos os usuários
+    /**
+     * Lista todos os usuários (apenas admin)
+     */
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("usuarios", usuarioService.findAll());
-        return "views/usuarios/lista";
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<UsuarioResponse>> list() {
+        return ResponseEntity.ok(usuarioService.findAll());
     }
 
-    // Exibe formulário de criação
-    @GetMapping("/novo")
-    public String createForm(Model model) {
-        model.addAttribute("usuario", new Usuario());
-        return "views/usuarios/form";
-    }
-
-    // Exibe um usuário específico
+    /**
+     * Busca um usuário por ID
+     */
     @GetMapping("/{id}")
-    public String show(@PathVariable String id, Model model) {
-        Usuario usuario = usuarioService.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        model.addAttribute("usuario", usuario);
-        return "views/usuarios/visualizar";
+    public ResponseEntity<UsuarioResponse> show(@PathVariable String id) {
+        return ResponseEntity.ok(usuarioService.findById(id));
     }
 
-    // Exibe formulário de edição
-    @GetMapping("/{id}/editar")
-    public String editForm(@PathVariable String id, Model model) {
-        Usuario usuario = usuarioService.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
-        model.addAttribute("usuario", usuario);
-        return "views/usuarios/form";
-    }
-
-    // Cria um novo usuário
+    /**
+     * Cria um novo usuário (apenas admin)
+     */
     @PostMapping
-    public String create(@Valid @ModelAttribute("usuario") Usuario usuario, BindingResult bindingResult,
-            Model model, RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("usuario", usuario);
-            return "views/usuarios/form";
-        }
-
-        try {
-            usuarioService.save(usuario);
-            redirectAttributes.addFlashAttribute("mensagemSucesso", "Usuário criado com sucesso!");
-            return "redirect:/usuarios";
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("usuario", usuario);
-            model.addAttribute("errorMessage", e.getMessage());
-            return "views/usuarios/form";
-        }
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UsuarioResponse> create(@Valid @RequestBody UsuarioRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.create(request));
     }
 
-    // Atualiza um usuário existente
+    /**
+     * Atualiza um usuário existente
+     */
     @PutMapping("/{id}")
-    public String update(@PathVariable String id, @Valid @ModelAttribute("usuario") Usuario usuario,
-            BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
-
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("usuario", usuario);
-            return "views/usuarios/form";
-        }
-
-        try {
-            usuario.setId(id);
-            usuarioService.save(usuario);
-            redirectAttributes.addFlashAttribute("mensagemSucesso", "Usuário atualizado com sucesso!");
-            return "redirect:/usuarios";
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("usuario", usuario);
-            model.addAttribute("errorMessage", e.getMessage());
-            return "views/usuarios/form";
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@PathVariable String id, @Valid @RequestBody UsuarioRequest request) {
+        usuarioService.update(id, request);
     }
 
-    // Exclui um usuário
+    /**
+     * Atualiza parcialmente um usuário
+     */
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void partialUpdate(@PathVariable String id, @RequestBody UsuarioRequest request) {
+        usuarioService.partialUpdate(id, request);
+    }
+
+    /**
+     * Remove um usuário (apenas admin)
+     */
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable String id, RedirectAttributes redirectAttributes) {
-        usuarioService.deleteById(id);
-        redirectAttributes.addFlashAttribute("mensagemSucesso", "Usuário excluído com sucesso!");
-        return "redirect:/usuarios";
+    @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable String id) {
+        usuarioService.delete(id);
     }
-
 }
