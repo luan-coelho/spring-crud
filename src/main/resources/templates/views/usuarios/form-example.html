@@ -1,0 +1,213 @@
+<!doctype html>
+<html
+  lang="pt-BR"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:ui="http://www.thymeleaf.org"
+  th:replace="~{layouts/layout-admin :: layout(~{::content}, ${usuario.id != null ? 'Editar Usuário' : 'Novo Usuário'}, ${usuario.id != null ? 'Editar Usuário' : 'Novo Usuário'})}">
+  <body>
+    <th:block th:fragment="content">
+      <!-- Back Link -->
+      <div class="mb-6">
+        <a
+          th:href="@{/usuarios}"
+          class="inline-flex items-center gap-2 text-sm font-medium text-gray-500 transition hover:text-brand-500 dark:text-gray-400 dark:hover:text-brand-400">
+          <ui:icon th:replace="~{components/icon :: arrowLeft}" />
+          Voltar para lista
+        </a>
+      </div>
+
+      <!-- Alert Messages -->
+      <div th:if="${successMessage}" class="mb-6">
+        <cui:alert
+          th:replace="~{components/alert :: dismissible(type='success', title='Sucesso!', message=${successMessage})}" />
+      </div>
+      <div th:if="${errorMessage}" class="mb-6">
+        <cui:alert
+          th:replace="~{components/alert :: dismissible(type='error', title='Erro!', message=${errorMessage})}" />
+      </div>
+
+      <!-- Form Card with Header and Footer -->
+      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+        <!-- Header -->
+        <div class="px-5 py-4 sm:px-6 sm:py-5">
+          <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
+            <span th:if="${usuario.id != null}">Editar Usuário</span>
+            <span th:unless="${usuario.id != null}">Cadastrar Novo Usuário</span>
+          </h3>
+          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <span th:if="${usuario.id != null}">Atualize as informações do usuário abaixo.</span>
+            <span th:unless="${usuario.id != null}">
+              Preencha os dados para criar um novo usuário.
+            </span>
+          </p>
+        </div>
+
+        <!-- Form -->
+        <form
+          th:action="${usuario.id != null ? '/usuarios/' + usuario.id : '/usuarios'}"
+          th:object="${usuario}"
+          method="post"
+          novalidate
+          class="border-t border-gray-100 dark:border-gray-800">
+          <input th:if="${usuario.id != null}" type="hidden" name="_method" value="PUT" />
+
+          <div class="p-5 sm:p-6">
+            <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+              <!-- Nome - USANDO COMPONENTE -->
+              <div
+                th:replace="~{fragments/components :: input(
+                field='nome',
+                label='Nome',
+                placeholder='Nome completo',
+                required=true
+              )}"></div>
+
+              <!-- Email - USANDO COMPONENTE -->
+              <div
+                th:replace="~{fragments/components :: input(
+                field='email',
+                label='E-mail',
+                placeholder='seu@email.com',
+                required=true,
+                type='email'
+              )}"></div>
+
+              <!-- CPF - USANDO COMPONENTE COM MÁSCARA -->
+              <div
+                th:replace="~{fragments/components :: input(
+                field='cpf',
+                label='CPF',
+                placeholder='000.000.000-00',
+                required=true,
+                mask='999.999.999-99'
+              )}"></div>
+
+              <!-- Telefone - USANDO COMPONENTE COM MÁSCARA -->
+              <div
+                th:replace="~{fragments/components :: input(
+                field='telefone',
+                label='Telefone',
+                placeholder='(00) 00000-0000',
+                required=false,
+                mask='(99) 99999-9999'
+              )}"></div>
+
+              <!-- Imagem URL - USANDO COMPONENTE -->
+              <div
+                class="lg:col-span-2"
+                th:replace="~{fragments/components :: input(
+                field='imagem',
+                label='URL da Imagem',
+                placeholder='https://exemplo.com/imagem.jpg',
+                required=false,
+                type='url'
+              )}"></div>
+
+              <!-- Papel - USANDO COMPONENTE SELECT -->
+              <div
+                th:replace="~{fragments/components :: select(
+                field='papel',
+                label='Papel',
+                required=false,
+                options=~{::papel-options}
+              )}">
+                <th:block th:fragment="papel-options">
+                  <option value="user">Usuário</option>
+                  <option value="admin">Administrador</option>
+                  <option value="moderator">Moderador</option>
+                </th:block>
+              </div>
+
+              <!-- Email Verificado (Toggle) -->
+              <div>
+                <label for="emailVerificado" class="flex cursor-pointer items-center gap-3">
+                  <div class="relative">
+                    <input
+                      type="checkbox"
+                      id="emailVerificado"
+                      th:field="*{emailVerificado}"
+                      class="peer sr-only" />
+                    <div
+                      class="h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-brand-500 peer-focus:ring-2 peer-focus:ring-brand-500/20 dark:bg-gray-700"></div>
+                    <div
+                      class="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow transition peer-checked:translate-x-5"></div>
+                  </div>
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-400">
+                    E-mail verificado
+                  </span>
+                </label>
+              </div>
+
+              <!-- Onboarding Completo (Toggle) -->
+              <div>
+                <label for="onboardingCompleto" class="flex cursor-pointer items-center gap-3">
+                  <div class="relative">
+                    <input
+                      type="checkbox"
+                      id="onboardingCompleto"
+                      th:field="*{onboardingCompleto}"
+                      class="peer sr-only" />
+                    <div
+                      class="h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-brand-500 peer-focus:ring-2 peer-focus:ring-brand-500/20 dark:bg-gray-700"></div>
+                    <div
+                      class="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow transition peer-checked:translate-x-5"></div>
+                  </div>
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-400">
+                    Onboarding completo
+                  </span>
+                </label>
+              </div>
+
+              <!-- Banido (Toggle) -->
+              <div>
+                <label for="banido" class="flex cursor-pointer items-center gap-3">
+                  <div class="relative">
+                    <input type="checkbox" id="banido" th:field="*{banido}" class="peer sr-only" />
+                    <div
+                      class="h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-error-500 peer-focus:ring-2 peer-focus:ring-error-500/20 dark:bg-gray-700"></div>
+                    <div
+                      class="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow transition peer-checked:translate-x-5"></div>
+                  </div>
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-400">
+                    Usuário banido
+                  </span>
+                </label>
+              </div>
+
+              <!-- Motivo do Banimento - USANDO COMPONENTE TEXTAREA -->
+              <div
+                class="lg:col-span-2"
+                th:replace="~{fragments/components :: textarea(
+                field='motivoBanimento',
+                label='Motivo do Banimento',
+                placeholder='Descreva o motivo do banimento...',
+                required=false,
+                rows=3
+              )}"></div>
+
+              <!-- Banimento Expira Em - USANDO COMPONENTE -->
+              <div
+                class="lg:col-span-2"
+                th:replace="~{fragments/components :: input(
+                field='banimentoExpiraEm',
+                label='Banimento Expira Em',
+                placeholder='',
+                required=false,
+                type='datetime-local'
+              )}"></div>
+            </div>
+          </div>
+
+          <!-- Footer with Buttons -->
+          <div
+            class="flex items-center justify-end gap-3 border-t border-gray-100 px-5 py-4 sm:px-6 dark:border-gray-800">
+            <ui:button
+              th:replace="~{components/button :: linkSecondary(href=@{/usuarios}, text='Cancelar')}" />
+            <ui:button
+              th:replace="~{components/button :: primary(text=${usuario.id != null ? 'Atualizar' : 'Cadastrar'}, type='submit')}" />
+          </div>
+        </form>
+      </div>
+    </th:block>
+  </body>
+</html>
