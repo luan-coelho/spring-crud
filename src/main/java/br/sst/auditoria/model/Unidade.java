@@ -1,6 +1,6 @@
 package br.sst.auditoria.model;
 
-import br.sst.auditoria.model.enums.Status;
+import br.sst.auditoria.model.enums.Situacao;
 import br.sst.auditoria.model.enums.TipoDocumento;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -32,7 +32,7 @@ import java.util.List;
     indexes = {
         @Index(name = "idx_unidade_organizacao_id", columnList = "organizacao_id"),
         @Index(name = "idx_unidade_empresa_id", columnList = "empresa_id"),
-        @Index(name = "idx_unidade_status", columnList = "status")
+        @Index(name = "idx_unidade_situacao", columnList = "situacao")
     }
 )
 public class Unidade {
@@ -53,9 +53,9 @@ public class Unidade {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @Column(name = "situacao", nullable = false)
     @Builder.Default
-    private Status status = Status.ACTIVE;
+    private Situacao situacao = Situacao.ATIVO;
 
     @NotBlank(message = "Nome da unidade é obrigatório")
     @Size(max = 100)

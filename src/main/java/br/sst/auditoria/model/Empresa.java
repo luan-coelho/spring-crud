@@ -1,6 +1,6 @@
 package br.sst.auditoria.model;
 
-import br.sst.auditoria.model.enums.Status;
+import br.sst.auditoria.model.enums.Situacao;
 import br.sst.auditoria.model.enums.TipoDocumento;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -31,7 +31,7 @@ import java.util.List;
     name = "empresa",
     indexes = {
         @Index(name = "idx_empresa_organizacao_id", columnList = "organizacao_id"),
-        @Index(name = "idx_empresa_status", columnList = "status")
+        @Index(name = "idx_empresa_situacao", columnList = "situacao")
     },
     uniqueConstraints = {
         @UniqueConstraint(
@@ -53,9 +53,9 @@ public class Empresa {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @Column(name = "situacao", nullable = false)
     @Builder.Default
-    private Status status = Status.ACTIVE;
+    private Situacao situacao = Situacao.ATIVO;
 
     @NotBlank(message = "Razão social é obrigatória")
     @Size(max = 200)

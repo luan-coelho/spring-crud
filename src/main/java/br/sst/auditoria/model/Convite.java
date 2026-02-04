@@ -36,12 +36,12 @@ public class Convite implements Serializable {
     @Builder.Default
     @NotBlank(message = "O papel é obrigatório")
     @Column(name = "papel", nullable = false)
-    private String papel = "member";
+    private String papel = "MEMBRO";
 
     @Builder.Default
     @NotBlank(message = "O status é obrigatório")
     @Column(name = "status", nullable = false)
-    private String status = "pending";
+    private String status = "PENDENTE";
 
     @NotNull(message = "A data de expiração é obrigatória")
     @Column(name = "expira_em", nullable = false)

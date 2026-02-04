@@ -130,7 +130,7 @@ Login de usuário.
 }
 ```
 
-#### POST `/api/auth/register`
+#### POST `/api/auth/cadastrar`
 
 Registro de novo usuário.
 
@@ -157,7 +157,7 @@ Dados do usuário autenticado.
 
 **Response:** `200 OK` + AuthResponse (sem token)
 
-#### POST `/api/auth/change-password`
+#### POST `/api/auth/alterar-senha`
 
 Alteração de senha.
 

@@ -33,25 +33,26 @@ public class AuthController {
     /**
      * Endpoint de registro de novo usuário
      */
-    @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+    @PostMapping("/cadastrar")
+    public ResponseEntity<AuthResponse> cadastro(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.registrar(request));
     }
 
     /**
      * Endpoint para obter dados do usuário autenticado
      */
-    @GetMapping("/me")
-    public ResponseEntity<AuthResponse> getCurrentUser() {
-        return ResponseEntity.ok(authService.getUsuarioAutenticado());
+    @GetMapping("/pegar-usuario-logado")
+    public ResponseEntity<AuthResponse> pegarUsuarioLogado() {
+        return ResponseEntity.ok(authService.pegarUsuarioLogado());
     }
 
     /**
      * Endpoint para alteração de senha
      */
-    @PostMapping("/change-password")
+    @PostMapping("/alterar-senha")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void changePassword(@Valid @RequestBody ChangePasswordRequest request) {
         authService.alterarSenha(request);
     }
+
 }

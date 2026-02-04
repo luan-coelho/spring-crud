@@ -20,6 +20,8 @@ import java.util.UUID;
  * Service para gerenciamento de Organizações
  * Baseado na API do Better Auth Organization Plugin
  */
+import br.sst.auditoria.model.enums.Papel;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -33,15 +35,15 @@ public class OrganizacaoService {
     private final UsuarioRepository usuarioRepository;
 
     // Papéis padrão
-    private static final String PAPEL_OWNER = "owner";
-    private static final String PAPEL_ADMIN = "admin";
-    private static final String PAPEL_MEMBER = "member";
+    private static final String PAPEL_OWNER = Papel.PROPRIETARIO.name();
+    private static final String PAPEL_ADMIN = Papel.ADMINISTRADOR.name();
+    private static final String PAPEL_MEMBER = Papel.MEMBRO.name();
 
     // Status de convite
-    private static final String CONVITE_PENDENTE = "pending";
-    private static final String CONVITE_ACEITO = "accepted";
-    private static final String CONVITE_REJEITADO = "rejected";
-    private static final String CONVITE_CANCELADO = "cancelled";
+    private static final String CONVITE_PENDENTE = "PENDENTE";
+    private static final String CONVITE_ACEITO = "ACEITO";
+    private static final String CONVITE_REJEITADO = "REJEITADO";
+    private static final String CONVITE_CANCELADO = "CANCELADO";
 
     // Configurações padrão
     private static final int CONVITE_EXPIRACAO_HORAS = 48;

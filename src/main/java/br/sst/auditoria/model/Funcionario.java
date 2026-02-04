@@ -1,6 +1,6 @@
 package br.sst.auditoria.model;
 
-import br.sst.auditoria.model.enums.StatusFuncionario;
+import br.sst.auditoria.model.enums.SituacaoFuncionario;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -40,7 +40,7 @@ import java.time.LocalDateTime;
         @Index(name = "idx_funcionario_unidade_id", columnList = "unidade_id"),
         @Index(name = "idx_funcionario_setor_id", columnList = "setor_id"),
         @Index(name = "idx_funcionario_cargo_id", columnList = "cargo_id"),
-        @Index(name = "idx_funcionario_status", columnList = "status")
+        @Index(name = "idx_funcionario_situacao", columnList = "situacao")
     },
     uniqueConstraints = {
         @UniqueConstraint(
@@ -82,8 +82,8 @@ public class Funcionario {
 
     @NotNull(message = "Status é obrigatório")
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private StatusFuncionario status;
+    @Column(name = "situacao", nullable = false)
+    private SituacaoFuncionario situacao;
 
     @NotBlank(message = "Nome completo é obrigatório")
     @Size(max = 200)

@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -115,7 +116,7 @@ public class AuthService {
      * Obtém informações do usuário autenticado
      */
     @Transactional(readOnly = true)
-    public AuthResponse getUsuarioAutenticado() {
+    public AuthResponse pegarUsuarioLogado() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()
@@ -171,7 +172,7 @@ public class AuthService {
     /**
      * Verifica se o usuário está autenticado
      */
-    public boolean isAutenticado() {
+    public boolean estaAutenticado() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication != null &&
                 authentication.isAuthenticated() &&
@@ -195,6 +196,7 @@ public class AuthService {
 
         final String roleToCheck = role;
         return authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals(roleToCheck));
+                .anyMatch(a -> Objects.equals(a.getAuthority(), roleToCheck));
     }
+    
 }

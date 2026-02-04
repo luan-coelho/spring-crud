@@ -29,7 +29,7 @@ public class Membro implements Serializable {
     @Builder.Default
     @NotBlank(message = "O papel é obrigatório")
     @Column(name = "papel", nullable = false)
-    private String papel = "member";
+    private String papel = "MEMBRO";
 
     @CreationTimestamp
     @Column(name = "criado_em", nullable = false, updatable = false)

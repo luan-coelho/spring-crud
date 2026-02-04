@@ -1,6 +1,6 @@
 package br.sst.auditoria.model;
 
-import br.sst.auditoria.model.enums.Status;
+import br.sst.auditoria.model.enums.Situacao;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -57,9 +57,9 @@ public class Setor {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @Column(name = "situacao", nullable = false)
     @Builder.Default
-    private Status status = Status.ACTIVE;
+    private Situacao situacao = Situacao.ATIVO;
 
     @NotBlank(message = "Nome do setor é obrigatório")
     @Size(max = 100)

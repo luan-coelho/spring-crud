@@ -1,6 +1,6 @@
 package br.sst.auditoria.model;
 
-import br.sst.auditoria.model.enums.Status;
+import br.sst.auditoria.model.enums.Situacao;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -29,7 +29,7 @@ import java.util.List;
     name = "endereco",
     indexes = {
         @Index(name = "idx_endereco_organizacao_id", columnList = "organizacao_id"),
-        @Index(name = "idx_endereco_status", columnList = "status")
+        @Index(name = "idx_endereco_situacao", columnList = "situacao")
     }
 )
 public class Endereco {
@@ -84,9 +84,9 @@ public class Endereco {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @Column(name = "situacao", nullable = false)
     @Builder.Default
-    private Status status = Status.ACTIVE;
+    private Situacao situacao = Situacao.ATIVO;
 
     @CreationTimestamp
     @Column(name = "criado_em", nullable = false, updatable = false)
