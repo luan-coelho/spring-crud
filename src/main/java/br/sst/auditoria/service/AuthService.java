@@ -8,6 +8,7 @@ import br.sst.auditoria.exception.BusinessException;
 import br.sst.auditoria.exception.ResourceNotFoundException;
 import br.sst.auditoria.exception.UnauthorizedException;
 import br.sst.auditoria.mapper.AuthMapper;
+import br.sst.auditoria.mapper.UsuarioMapper;
 import br.sst.auditoria.model.Conta;
 import br.sst.auditoria.model.Usuario;
 import br.sst.auditoria.repository.ContaRepository;
@@ -36,6 +37,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final AuthMapper authMapper;
+    private final UsuarioMapper usuarioMapper;
 
     /**
      * Realiza login do usuário
@@ -75,17 +77,9 @@ public class AuthService {
         }
 
         // Cria o usuário
-        Usuario usuario = Usuario.builder()
-                .id(UUID.randomUUID().toString())
-                .nome(request.nome())
-                .email(request.email())
-                .cpf(request.cpf())
-                .telefone(request.telefone())
-                .emailVerificado(true)
-                .papel("user")
-                .banido(false)
-                .onboardingCompleto(false)
-                .build();
+        // Cria o usuário
+        Usuario usuario = usuarioMapper.toEntity(request);
+        usuario.setId(UUID.randomUUID().toString());
 
         usuario = usuarioRepository.save(usuario);
 
@@ -126,15 +120,7 @@ public class AuthService {
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        return new AuthResponse(
-                null,
-                null,
-                userDetails.getId(),
-                userDetails.getNome(),
-                userDetails.getEmail(),
-                userDetails.getPapel(),
-                userDetails.getImagem()
-        );
+        return authMapper.toResponse(userDetails);
     }
 
     /**

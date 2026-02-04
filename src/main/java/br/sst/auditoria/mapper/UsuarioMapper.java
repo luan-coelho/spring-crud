@@ -1,5 +1,6 @@
 package br.sst.auditoria.mapper;
 
+import br.sst.auditoria.dto.auth.RegisterRequest;
 import br.sst.auditoria.dto.usuario.UsuarioRequest;
 import br.sst.auditoria.dto.usuario.UsuarioResponse;
 import br.sst.auditoria.model.Usuario;
@@ -27,6 +28,21 @@ public interface UsuarioMapper {
     @Mapping(target = "convitesEnviados", ignore = true)
     @Mapping(target = "papel", defaultValue = "user")
     Usuario toEntity(UsuarioRequest request);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "emailVerificado", constant = "true")
+    @Mapping(target = "onboardingCompleto", constant = "false")
+    @Mapping(target = "banido", constant = "false")
+    @Mapping(target = "motivoBanimento", ignore = true)
+    @Mapping(target = "banimentoExpiraEm", ignore = true)
+    @Mapping(target = "criadoEm", ignore = true)
+    @Mapping(target = "atualizadoEm", ignore = true)
+    @Mapping(target = "sessoes", ignore = true)
+    @Mapping(target = "contas", ignore = true)
+    @Mapping(target = "membros", ignore = true)
+    @Mapping(target = "convitesEnviados", ignore = true)
+    @Mapping(target = "papel", constant = "user")
+    Usuario toEntity(RegisterRequest request);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "emailVerificado", ignore = true)

@@ -4,6 +4,10 @@ import br.sst.auditoria.dto.organizacao.*;
 import br.sst.auditoria.exception.BusinessException;
 import br.sst.auditoria.exception.ResourceNotFoundException;
 import br.sst.auditoria.exception.UnauthorizedException;
+import br.sst.auditoria.mapper.ConviteMapper;
+import br.sst.auditoria.mapper.MembroMapper;
+import br.sst.auditoria.mapper.OrganizacaoMapper;
+import br.sst.auditoria.mapper.PapelOrganizacaoMapper;
 import br.sst.auditoria.model.*;
 import br.sst.auditoria.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +37,11 @@ public class OrganizacaoService {
     private final PapelOrganizacaoRepository papelOrganizacaoRepository;
     private final SessaoRepository sessaoRepository;
     private final UsuarioRepository usuarioRepository;
+
+    private final OrganizacaoMapper organizacaoMapper;
+    private final MembroMapper membroMapper;
+    private final ConviteMapper conviteMapper;
+    private final PapelOrganizacaoMapper papelOrganizacaoMapper;
 
     // Papéis padrão
     private static final String PAPEL_OWNER = Papel.PROPRIETARIO.name();
@@ -68,13 +77,8 @@ public class OrganizacaoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário", "id", usuarioId));
 
         // Criar organização
-        Organizacao organizacao = Organizacao.builder()
-                .id(UUID.randomUUID().toString())
-                .nome(request.nome())
-                .slug(request.slug())
-                .logo(request.logo())
-                .metadados(request.metadados())
-                .build();
+        Organizacao organizacao = organizacaoMapper.toEntity(request);
+        organizacao.setId(UUID.randomUUID().toString());
 
         organizacao = organizacaoRepository.save(organizacao);
 
@@ -88,7 +92,7 @@ public class OrganizacaoService {
 
         membroRepository.save(membro);
 
-        return OrganizacaoResponse.fromEntity(organizacao);
+        return organizacaoMapper.toResponse(organizacao);
     }
 
     /**
@@ -108,7 +112,7 @@ public class OrganizacaoService {
     public List<OrganizacaoResponse> listarOrganizacoesDoUsuario(String usuarioId) {
         List<Membro> membros = membroRepository.findByUsuarioIdWithOrganizacao(usuarioId);
         return membros.stream()
-                .map(m -> OrganizacaoResponse.fromEntity(m.getOrganizacao()))
+                .map(m -> organizacaoMapper.toResponse(m.getOrganizacao()))
                 .toList();
     }
 
@@ -137,7 +141,7 @@ public class OrganizacaoService {
         }
 
         sessaoRepository.atualizarOrganizacaoAtiva(sessaoId, organizacao.getId());
-        return OrganizacaoResponse.fromEntity(organizacao);
+        return organizacaoMapper.toResponse(organizacao);
     }
 
     /**
@@ -160,14 +164,14 @@ public class OrganizacaoService {
 
         List<MembroResponse> membrosResponse = membros.stream()
                 .limit(limite)
-                .map(MembroResponse::fromEntity)
+                .map(membroMapper::toResponse)
                 .toList();
 
         List<ConviteResponse> convitesResponse = convites.stream()
-                .map(ConviteResponse::fromEntity)
+                .map(conviteMapper::toResponse)
                 .toList();
 
-        return OrganizacaoCompletaResponse.fromEntity(organizacao, membrosResponse, convitesResponse);
+        return organizacaoMapper.toCompletaResponse(organizacao, membrosResponse, convitesResponse);
     }
 
     /**
@@ -189,18 +193,9 @@ public class OrganizacaoService {
             organizacao.setSlug(request.slug());
         }
 
-        if (request.nome() != null) {
-            organizacao.setNome(request.nome());
-        }
-        if (request.logo() != null) {
-            organizacao.setLogo(request.logo());
-        }
-        if (request.metadados() != null) {
-            organizacao.setMetadados(request.metadados());
-        }
-
+        organizacaoMapper.updateEntity(request, organizacao);
         organizacao = organizacaoRepository.save(organizacao);
-        return OrganizacaoResponse.fromEntity(organizacao);
+        return organizacaoMapper.toResponse(organizacao);
     }
 
     /**
@@ -250,25 +245,22 @@ public class OrganizacaoService {
                 Convite convite = conviteExistente.get();
                 convite.setExpiraEm(LocalDateTime.now().plusHours(CONVITE_EXPIRACAO_HORAS));
                 convite = conviteRepository.save(convite);
-                return ConviteResponse.fromEntity(convite);
+                return conviteMapper.toResponse(convite);
             } else {
                 throw new BusinessException("Já existe um convite pendente para este e-mail");
             }
         }
 
         // Criar novo convite
-        Convite convite = Convite.builder()
-                .id(UUID.randomUUID().toString())
-                .email(request.email())
-                .organizacao(organizacao)
-                .convidador(convidador)
-                .papel(request.papel())
-                .status(CONVITE_PENDENTE)
-                .expiraEm(LocalDateTime.now().plusHours(CONVITE_EXPIRACAO_HORAS))
-                .build();
+        Convite convite = conviteMapper.toEntity(request);
+        convite.setId(UUID.randomUUID().toString());
+        convite.setOrganizacao(organizacao);
+        convite.setConvidador(convidador);
+        convite.setStatus(CONVITE_PENDENTE);
+        convite.setExpiraEm(LocalDateTime.now().plusHours(CONVITE_EXPIRACAO_HORAS));
 
         convite = conviteRepository.save(convite);
-        return ConviteResponse.fromEntity(convite);
+        return conviteMapper.toResponse(convite);
     }
 
     /**
@@ -316,7 +308,7 @@ public class OrganizacaoService {
         convite.setStatus(CONVITE_ACEITO);
         conviteRepository.save(convite);
 
-        return MembroResponse.fromEntity(membro);
+        return membroMapper.toResponse(membro);
     }
 
     /**
@@ -370,7 +362,7 @@ public class OrganizacaoService {
     public ConviteResponse obterConvite(String conviteId) {
         Convite convite = conviteRepository.findById(conviteId)
                 .orElseThrow(() -> new ResourceNotFoundException("Convite", "id", conviteId));
-        return ConviteResponse.fromEntity(convite);
+        return conviteMapper.toResponse(convite);
     }
 
     /**
@@ -385,7 +377,7 @@ public class OrganizacaoService {
         }
 
         return conviteRepository.findByOrganizacaoId(organizacaoId).stream()
-                .map(ConviteResponse::fromEntity)
+                .map(conviteMapper::toResponse)
                 .toList();
     }
 
@@ -396,7 +388,7 @@ public class OrganizacaoService {
     @Transactional(readOnly = true)
     public List<ConviteResponse> listarConvitesDoUsuario(String email) {
         return conviteRepository.findConvitesPendentesValidos(email, LocalDateTime.now()).stream()
-                .map(ConviteResponse::fromEntity)
+                .map(conviteMapper::toResponse)
                 .toList();
     }
 
@@ -416,7 +408,7 @@ public class OrganizacaoService {
         }
 
         return membroRepository.findByOrganizacaoId(organizacaoId, pageable)
-                .map(MembroResponse::fromEntity);
+                .map(membroMapper::toResponse);
     }
 
     /**
@@ -477,7 +469,7 @@ public class OrganizacaoService {
         membro.setPapel(request.papel());
         membro = membroRepository.save(membro);
 
-        return MembroResponse.fromEntity(membro);
+        return membroMapper.toResponse(membro);
     }
 
     /**
@@ -488,7 +480,7 @@ public class OrganizacaoService {
     public MembroResponse obterMembroAtivo(String organizacaoId, String usuarioId) {
         Membro membro = membroRepository.findByOrganizacaoIdAndUsuarioId(organizacaoId, usuarioId)
                 .orElseThrow(() -> new ResourceNotFoundException("Membro", "usuario", usuarioId));
-        return MembroResponse.fromEntity(membro);
+        return membroMapper.toResponse(membro);
     }
 
     /**
@@ -524,15 +516,13 @@ public class OrganizacaoService {
             throw new BusinessException("Usuário já é membro desta organização");
         }
 
-        Membro membro = Membro.builder()
-                .id(UUID.randomUUID().toString())
-                .organizacao(organizacao)
-                .usuario(usuario)
-                .papel(request.papel())
-                .build();
+        Membro membro = membroMapper.toEntity(request);
+        membro.setId(UUID.randomUUID().toString());
+        membro.setOrganizacao(organizacao);
+        membro.setUsuario(usuario);
 
         membro = membroRepository.save(membro);
-        return MembroResponse.fromEntity(membro);
+        return membroMapper.toResponse(membro);
     }
 
     /**
@@ -573,14 +563,11 @@ public class OrganizacaoService {
             throw new BusinessException("Papel já existe nesta organização");
         }
 
-        PapelOrganizacao papel = PapelOrganizacao.builder()
-                .organizacao(organizacao)
-                .papel(request.papel())
-                .permissao(request.permissao())
-                .build();
+        PapelOrganizacao papel = papelOrganizacaoMapper.toEntity(request);
+        papel.setOrganizacao(organizacao);
 
         papel = papelOrganizacaoRepository.save(papel);
-        return PapelOrganizacaoResponse.fromEntity(papel);
+        return papelOrganizacaoMapper.toResponse(papel);
     }
 
     /**
@@ -617,7 +604,7 @@ public class OrganizacaoService {
         }
 
         return papelOrganizacaoRepository.findByOrganizacaoId(organizacaoId).stream()
-                .map(PapelOrganizacaoResponse::fromEntity)
+                .map(papelOrganizacaoMapper::toResponse)
                 .toList();
     }
 
@@ -643,7 +630,7 @@ public class OrganizacaoService {
                     .orElseThrow(() -> new ResourceNotFoundException("Papel", "id/nome", papelIdOuNome));
         }
 
-        return PapelOrganizacaoResponse.fromEntity(papel);
+        return papelOrganizacaoMapper.toResponse(papel);
     }
 
     /**
@@ -676,12 +663,10 @@ public class OrganizacaoService {
             papel.setPapel(request.novoNome());
         }
 
-        if (request.permissao() != null) {
-            papel.setPermissao(request.permissao());
-        }
+        papelOrganizacaoMapper.updateEntity(request, papel);
 
         papel = papelOrganizacaoRepository.save(papel);
-        return PapelOrganizacaoResponse.fromEntity(papel);
+        return papelOrganizacaoMapper.toResponse(papel);
     }
 
     // ========================================================================

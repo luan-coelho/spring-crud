@@ -4,8 +4,9 @@ import br.sst.auditoria.dto.auth.AuthResponse;
 import br.sst.auditoria.security.CustomUserDetails;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface AuthMapper {
 
     @Mapping(target = "token", source = "token")
@@ -16,4 +17,13 @@ public interface AuthMapper {
     @Mapping(target = "papel", source = "userDetails.papel")
     @Mapping(target = "imagem", source = "userDetails.imagem")
     AuthResponse toResponse(String token, CustomUserDetails userDetails);
+
+    @Mapping(target = "token", ignore = true)
+    @Mapping(target = "type", ignore = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "nome", source = "nome")
+    @Mapping(target = "email", source = "email")
+    @Mapping(target = "papel", source = "papel")
+    @Mapping(target = "imagem", source = "imagem")
+    AuthResponse toResponse(CustomUserDetails userDetails);
 }
