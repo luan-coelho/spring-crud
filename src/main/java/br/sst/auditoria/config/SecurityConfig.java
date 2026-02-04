@@ -1,8 +1,8 @@
 package br.sst.auditoria.config;
 
+import br.sst.auditoria.security.CustomAuthenticationEntryPoint;
 import br.sst.auditoria.security.CustomUserDetailsService;
-import br.sst.auditoria.security.jwt.JwtAuthenticationEntryPoint;
-import br.sst.auditoria.security.jwt.JwtAuthenticationFilter;
+import br.sst.auditoria.security.session.SessionAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,14 +24,18 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Configuração de segurança usando autenticação baseada em sessão persistida no banco.
+ * Modelo similar ao Better Auth - sessões são armazenadas no PostgreSQL.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
-    private final JwtAuthenticationEntryPoint unauthorizedHandler;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final SessionAuthenticationFilter sessionAuthenticationFilter;
+    private final CustomAuthenticationEntryPoint unauthorizedHandler;
 
     @Value("${cors.allowed-origins:http://localhost:3000,http://localhost:5173}")
     private String allowedOrigins;
@@ -40,11 +44,11 @@ public class SecurityConfig {
     private String allowedMethods;
 
     public SecurityConfig(CustomUserDetailsService userDetailsService,
-                          JwtAuthenticationEntryPoint unauthorizedHandler,
-                          JwtAuthenticationFilter jwtAuthenticationFilter) {
+                          SessionAuthenticationFilter sessionAuthenticationFilter,
+                          CustomAuthenticationEntryPoint unauthorizedHandler) {
         this.userDetailsService = userDetailsService;
+        this.sessionAuthenticationFilter = sessionAuthenticationFilter;
         this.unauthorizedHandler = unauthorizedHandler;
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
     @Bean
@@ -54,7 +58,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 // Enable CORS
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                // Set session management to stateless
+                // A sessão é gerenciada manualmente no banco, não pelo Spring Session
+                // Usamos STATELESS para não criar HttpSession, mas o estado está no banco
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // Set unauthorized handler
@@ -72,9 +77,9 @@ public class SecurityConfig {
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         // All other endpoints require authentication
                         .anyRequest().authenticated())
-                // Add JWT filter
+                // Add Session authentication filter
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(sessionAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -86,7 +91,7 @@ public class SecurityConfig {
         configuration.setAllowedMethods(Arrays.asList(allowedMethods.split(",")));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
-        configuration.setExposedHeaders(List.of("Authorization"));
+        configuration.setExposedHeaders(List.of("Authorization", "Set-Cookie"));
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

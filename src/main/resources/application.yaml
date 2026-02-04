@@ -15,10 +15,13 @@ spring:
     init:
       mode: always
 
-# JWT Configuration
-jwt:
-  secret: sst-auditoria-jwt-secret-key-deve-ter-pelo-menos-256-bits-para-ser-seguro
-  expiration: 86400000 # 24 hours in milliseconds
+# Session Configuration (similar to Better Auth)
+session:
+  expiration: 604800000 # 7 days in milliseconds
+  cookie:
+    max-age: 604800 # 7 days in seconds
+    secure: false # Set to true in production with HTTPS
+    same-site: Lax # Lax, Strict, or None
 
 # Server Configuration
 server:
@@ -28,5 +31,11 @@ server:
 cors:
   allowed-origins: http://localhost:3000,http://localhost:5173
   allowed-methods: GET,POST,PUT,DELETE,PATCH,OPTIONS
-  allowed-headers: '*'
+  allowed-headers: "*"
   allow-credentials: true
+
+# Logging
+logging:
+  level:
+    br.sst.auditoria: DEBUG
+    org.springframework.security: DEBUG

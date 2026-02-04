@@ -1,4 +1,4 @@
-package br.sst.auditoria.security.jwt;
+package br.sst.auditoria.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
@@ -13,9 +13,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Ponto de entrada para erros de autenticação (401 Unauthorized).
+ * Retorna uma resposta JSON consistente quando o usuário tenta acessar recurso protegido sem autenticação.
+ */
 @Component
-public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
-    
+public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
@@ -27,7 +31,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         body.put("success", false);
         body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
         body.put("error", "Unauthorized");
-        body.put("message", authException.getMessage());
+        body.put("message", "Acesso não autorizado. Faça login para continuar.");
         body.put("path", request.getServletPath());
         
         final ObjectMapper mapper = new ObjectMapper();
