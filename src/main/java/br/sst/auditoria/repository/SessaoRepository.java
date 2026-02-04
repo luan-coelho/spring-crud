@@ -29,4 +29,12 @@ public interface SessaoRepository extends JpaRepository<Sessao, String> {
     @Modifying
     @Query("DELETE FROM Sessao s WHERE s.usuario.id = :usuarioId")
     void deleteAllByUsuarioId(@Param("usuarioId") String usuarioId);
+
+    @Modifying
+    @Query("UPDATE Sessao s SET s.organizacaoAtiva.id = :organizacaoId WHERE s.id = :sessaoId")
+    void atualizarOrganizacaoAtiva(@Param("sessaoId") String sessaoId, @Param("organizacaoId") String organizacaoId);
+
+    @Modifying
+    @Query("UPDATE Sessao s SET s.organizacaoAtiva = null WHERE s.id = :sessaoId")
+    void limparOrganizacaoAtiva(@Param("sessaoId") String sessaoId);
 }
